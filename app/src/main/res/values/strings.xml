@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">暇つぶし検索</string>
+
+    <string name="action_settings">設定</string>
+    <string name="search_text">検索</string>
+    <string name="settings_color_text">色設定</string>
+    <string name="copyright">(c) toastkidjp (@y_q1m)</string>
+    <string name="search_exit_text">終了</string>
+
+    <string-array name="search_categories">
+        <item>Web</item>
+        <item>Twitter</item>
+        <item>YouTube</item>
+        <item>Wikipedia</item>
+        <item>Aozora</item>
+    </string-array>
+</resources>
