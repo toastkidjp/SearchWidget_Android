@@ -9,11 +9,14 @@
     <string name="title_licenses">ライセンス情報</string>
     <string name="title_close">閉じる</string>
 
-    <string-array name="search_categories">
-        <item>Web</item>
-        <item>Twitter</item>
-        <item>YouTube</item>
-        <item>Wikipedia</item>
-        <item>Aozora</item>
-    </string-array>
+    <string name="search_category_web">Web</string>
+    <string name="search_category_image">画像</string>
+    <string name="search_category_video">動画</string>
+    <string name="search_category_definition">定義</string>
+    <string name="search_category_map">地図</string>
+    <string name="search_category_apps">アプリ</string>
+    <string name="search_category_twitter">Twitter</string>
+    <string name="search_category_youtube">YouTube</string>
+    <string name="search_category_wikipedia">Wikipedia</string>
+    <string name="search_category_free_book">青空文庫</string>
 </resources>

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkgray_scale"
+    android:background="@color/transparent"
     >
     <LinearLayout
         android:id="@+id/box_background"
@@ -57,8 +57,7 @@
     <Spinner
         android:id="@+id/search_categories"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:entries="@array/search_categories"
+        android:layout_height="wrap_content"
         android:spinnerMode="dropdown"
         android:background="@color/soft_background"
         />

@@ -10,11 +10,4 @@
     <string name="title_licenses">License information</string>
     <string name="title_close">close</string>
 
-    <string-array name="search_categories">
-        <item>Web</item>
-        <item>Twitter</item>
-        <item>YouTube</item>
-        <item>Wikipedia</item>
-        <item>Aozora</item>
-    </string-array>
 </resources>

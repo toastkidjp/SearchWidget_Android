@@ -3,11 +3,14 @@ package jp.toastkid.search_widget.search;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -21,11 +24,16 @@ import jp.toastkid.search_widget.settings.SettingsActivity;
 
 /**
  * Search activity.
+ *
  * @author toastkidjp
  */
 public class SearchActivity extends AppCompatActivity {
 
-    /** Background. */
+    /** Background filter. */
+    @BindView(R.id.search_background)
+    public View mFilter;
+
+    /** Searchbox background. */
     @BindView(R.id.box_background)
     public View mBackground;
 
@@ -40,11 +48,19 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_close)
     public ImageView mSearchClose;
 
+    private UrlFactory mUrlFactory;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        mUrlFactory = new UrlFactory(this);
+        mUrlFactory.initSpinner(mSearchCategories);
+
         mSearchInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId != EditorInfo.IME_ACTION_SEARCH) {
                 return false;
@@ -54,10 +70,19 @@ public class SearchActivity extends AppCompatActivity {
         });
         mBackground.setBackgroundColor(new PreferenceApplier(this).getColor());
         mSearchClose.setOnClickListener(v -> close());
+        mFilter.setOnClickListener(v -> close());
     }
 
-    @OnClick(R.id.search_background)
-    public void close() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final InputMethodManager inputMethodManager
+                = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(mSearchInput, 0);
+        mFilter.setBackgroundColor(getResources().getColor(R.color.darkgray_scale));
+    }
+
+    private void close() {
         finish();
     }
 
@@ -84,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
         final CustomTabsIntent intent = new CustomTabsIntent.Builder()
                 .setToolbarColor(new PreferenceApplier(this).getColor())
                 .build();
-        intent.launchUrl(this, new UrlFactory().make(category, query));
+        intent.launchUrl(this, mUrlFactory.make(category, query));
     }
 
     /**
