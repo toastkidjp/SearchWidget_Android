@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SearchWidget</string>
+    <string name="app_name">WaStage - Simple Search Widget</string>
 
     <string name="action_settings">Settings</string>
     <string name="search_text">Let\'s search!</string>
