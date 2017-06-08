@@ -75,6 +75,10 @@ class UrlFactory {
                 R.drawable.ic_android_app,
                 "https://play.google.com/store/search?q="
         ),
+        AMAZON(R.string.search_category_shopping,
+                R.drawable.ic_shopping,
+                "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords="
+        ),
         AOZORA(R.string.search_category_free_book,
                 R.drawable.ic_library_books,
                 "https://www.google.co.jp/search?as_dt=i&as_sitesearch=www.aozora.gr.jp&as_q="

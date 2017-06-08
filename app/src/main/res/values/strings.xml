@@ -19,4 +19,5 @@
     <string name="search_category_youtube">YouTube</string>
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_free_book">青空文庫</string>
+    <string name="search_category_shopping">ショッピング</string>
 </resources>
