@@ -26,7 +26,7 @@ import jp.toastkid.search_widget.settings.SettingsActivity;
 public class SearchActivity extends AppCompatActivity {
 
     /** Background. */
-    @BindView(R.id.searchbox_background)
+    @BindView(R.id.box_background)
     public View mBackground;
 
     /** Search input. */
@@ -53,7 +53,12 @@ public class SearchActivity extends AppCompatActivity {
             return true;
         });
         mBackground.setBackgroundColor(new PreferenceApplier(this).getColor());
-        mSearchClose.setOnClickListener(v -> finish());
+        mSearchClose.setOnClickListener(v -> close());
+    }
+
+    @OnClick(R.id.search_background)
+    public void close() {
+        finish();
     }
 
     /**
