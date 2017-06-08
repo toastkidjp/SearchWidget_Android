@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/soft_background"
+    >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        >
+        <ImageView
+            android:id="@+id/search_suggest_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_search_black"
+            />
+        <TextView
+            android:id="@+id/search_suggest_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/search_suggest_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="+"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:background="@color/darkgray_scale"
+            />
+    </LinearLayout>
+    <include layout="@layout/primary_dark_divider"/>
+</LinearLayout>

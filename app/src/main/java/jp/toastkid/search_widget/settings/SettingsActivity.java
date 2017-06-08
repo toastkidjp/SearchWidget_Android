@@ -2,10 +2,8 @@ package jp.toastkid.search_widget.settings;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -13,16 +11,11 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.slider.AlphaSlider;
 import com.flask.colorpicker.slider.LightnessSlider;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
-import okio.Okio;
 
 /**
  * Settings activity.

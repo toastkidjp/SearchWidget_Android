@@ -3,23 +3,38 @@ package jp.toastkid.search_widget.search;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.libs.Logger;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
+import jp.toastkid.search_widget.search.suggest.SuggetFetcher;
 import jp.toastkid.search_widget.settings.SettingsActivity;
 
 /**
@@ -48,7 +63,14 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_close)
     public ImageView mSearchClose;
 
+    @BindView(R.id.search_suggests)
+    public ListView mSearchSuggests;
+
     private UrlFactory mUrlFactory;
+
+    private SuggestAdapter mSuggestAdapter;
+
+    private Map<String, List<String>> mCache;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -68,9 +90,60 @@ public class SearchActivity extends AppCompatActivity {
             search(mSearchCategories.getSelectedItem().toString(), v.getText().toString());
             return true;
         });
+
+        mSuggestAdapter = new SuggestAdapter(LayoutInflater.from(this));
+        mSearchSuggests.setAdapter(mSuggestAdapter);
+
+        mCache = new HashMap<>(30);
+        final SuggetFetcher fetcher = new SuggetFetcher();
+        mSearchInput.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // NOP.
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                final String key = s.toString();
+                if (mCache.containsKey(key)) {
+                    Logger.i("suggest: use cache " + s);
+                    replaceSuggests(mCache.get(key));
+                    return;
+                }
+
+                fetcher.fetchAsync(key, suggests -> {
+                    if (suggests == null || suggests.isEmpty()) {
+                        Completable.create(e -> {
+                            mSearchSuggests.setVisibility(View.GONE);
+                            e.onComplete();
+                        }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
+                        return;
+                    }
+                    Logger.i("suggest: fetch " + s + " " + suggests);
+                    replaceSuggests(suggests);
+                    mCache.put(key, suggests);
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // NOP.
+            }
+        });
         mBackground.setBackgroundColor(new PreferenceApplier(this).getColor());
         mSearchClose.setOnClickListener(v -> close());
         mFilter.setOnClickListener(v -> close());
+    }
+
+    private void replaceSuggests(final List<String> suggests) {
+        runOnUiThread(() -> {
+            mSearchSuggests.setVisibility(View.VISIBLE);
+            mSuggestAdapter.replace(suggests);
+            mSuggestAdapter.notifyDataSetChanged();
+            mSuggestAdapter.notifyDataSetInvalidated();
+        });
     }
 
     @Override
@@ -110,6 +183,52 @@ public class SearchActivity extends AppCompatActivity {
                 .setToolbarColor(new PreferenceApplier(this).getColor())
                 .build();
         intent.launchUrl(this, mUrlFactory.make(category, query));
+    }
+
+     private class SuggestAdapter extends BaseAdapter {
+
+         private final LayoutInflater mInflater;
+         private final List<String> mSuggests;
+
+         SuggestAdapter(final LayoutInflater inflater) {
+             mInflater = inflater;
+             mSuggests = new ArrayList<>();
+         }
+
+         void replace(final List<String> strs) {
+             mSuggests.clear();
+             mSuggests.addAll(strs);
+         }
+
+         @Override
+         public int getCount() {
+             return mSuggests.size();
+         }
+
+         @Override
+         public Object getItem(int position) {
+             return mSuggests.get(position);
+         }
+
+         @Override
+         public long getItemId(int position) {
+             return mSuggests.get(position).hashCode();
+         }
+
+         @Override
+         public View getView(int position, View convertView, ViewGroup parent) {
+             final View inflate = mInflater.inflate(R.layout.search_suggest, null);
+             final TextView textView = (TextView) inflate.findViewById(R.id.search_suggest_text);
+             final String suggest = mSuggests.get(position);
+             textView.setText(suggest);
+             inflate.findViewById(R.id.search_suggest_add).setOnClickListener(v -> {
+                 mSearchInput.setText(suggest + " ");
+                 mSearchInput.setSelection(mSearchInput.getText().toString().length());
+             });
+             inflate.setOnClickListener(
+                     v -> search(mSearchCategories.getSelectedItem().toString(), suggest));
+             return inflate;
+         }
     }
 
     /**

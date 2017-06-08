@@ -2,12 +2,8 @@ package jp.toastkid.search_widget.search;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.graphics.drawable.DrawableWrapper;
 import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.DrawableUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +12,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.libs.Utf8StringEncoder;
 
 /**
  * @author toastkidjp
@@ -40,7 +34,7 @@ class UrlFactory {
     }
 
     /** Default URL generator */
-    private static Generator DEFAULT = (h, q) -> h + encodeQuery(q);
+    private static Generator DEFAULT = (h, q) -> h + Utf8StringEncoder.encode(q);
 
     /**
      * Factories.
@@ -154,15 +148,6 @@ class UrlFactory {
 
     public Uri make(final String category, final String query) {
         return Uri.parse(Factory.findByCategory(category).make(query));
-    }
-
-    private static String encodeQuery(final String query) {
-        try {
-            return URLEncoder.encode(query, "UTF-8");
-        } catch (final UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return query;
     }
 
 }

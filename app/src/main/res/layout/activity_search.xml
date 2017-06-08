@@ -61,4 +61,15 @@
         android:spinnerMode="dropdown"
         android:background="@color/soft_background"
         />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <jp.toastkid.search_widget.views.NonScrollListView
+            android:id="@+id/search_suggests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            />
+    </ScrollView>
 </LinearLayout>
