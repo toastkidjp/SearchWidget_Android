@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import butterknife.BindView;
@@ -36,6 +37,9 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_categories)
     public Spinner mSearchCategories;
 
+    @BindView(R.id.search_close)
+    public ImageView mSearchClose;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,7 @@ public class SearchActivity extends AppCompatActivity {
             return true;
         });
         mBackground.setBackgroundColor(new PreferenceApplier(this).getColor());
+        mSearchClose.setOnClickListener(v -> finish());
     }
 
     /**
@@ -62,11 +67,6 @@ public class SearchActivity extends AppCompatActivity {
     @OnClick(R.id.settings)
     public void launchSettings() {
         startActivity(SettingsActivity.makeIntent(this));
-    }
-
-    @OnClick(R.id.search_exit)
-    public void exit() {
-        finish();
     }
 
     /**
