@@ -6,6 +6,8 @@
     <string name="settings_color_text">色設定</string>
     <string name="copyright">(c) toastkidjp (@y_q1m)</string>
     <string name="search_exit_text">終了</string>
+    <string name="title_licenses">ライセンス情報</string>
+    <string name="title_close">閉じる</string>
 
     <string-array name="search_categories">
         <item>Web</item>

@@ -1,24 +1,28 @@
 package jp.toastkid.search_widget.settings;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.slider.AlphaSlider;
 import com.flask.colorpicker.slider.LightnessSlider;
 
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.toastkid.search_widget.R;
-import jp.toastkid.search_widget.libs.Logger;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
+import okio.Okio;
 
 /**
  * Settings activity.
@@ -50,6 +54,17 @@ public class SettingsActivity extends AppCompatActivity {
         mPreferenceApplier = new PreferenceApplier(this);
         final int bgColor = mPreferenceApplier.getColor();
         palette.setColor(bgColor, false);
+        initToolbar(bgColor);
+    }
+
+    /**
+     * Initialize Toolbar.
+     * @param bgColor Toolbar's background color.
+     */
+    private void initToolbar(final int bgColor) {
+        toolbar.setNavigationIcon(R.drawable.ic_close);
+        toolbar.setNavigationOnClickListener(v -> finish());
+        toolbar.setTitle(R.string.action_settings);
         toolbar.setBackgroundColor(bgColor);
         toolbar.inflateMenu(R.menu.settings_toolbar_menu);
         toolbar.setOnMenuItemClickListener(item -> {
@@ -58,6 +73,11 @@ public class SettingsActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    @OnClick(R.id.settings_licenses)
+    public void license() {
+        new LicenseViewer(this).invoke();
     }
 
     @Override
@@ -79,5 +99,4 @@ public class SettingsActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
-
 }

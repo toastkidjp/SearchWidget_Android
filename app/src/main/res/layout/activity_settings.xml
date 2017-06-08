@@ -55,6 +55,18 @@
     <include layout="@layout/primary_dark_divider" />
 
     <TextView
+        android:id="@+id/settings_licenses"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
+        android:text="@string/title_licenses"
+        android:drawableLeft="@drawable/ic_license"
+        />
+
+    <include layout="@layout/primary_dark_divider" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
