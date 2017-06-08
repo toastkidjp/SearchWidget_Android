@@ -226,7 +226,10 @@ public class SearchActivity extends AppCompatActivity {
                  mSearchInput.setSelection(mSearchInput.getText().toString().length());
              });
              inflate.setOnClickListener(
-                     v -> search(mSearchCategories.getSelectedItem().toString(), suggest));
+                     v -> {
+                         mSearchInput.setText(suggest);
+                         search(mSearchCategories.getSelectedItem().toString(), suggest);
+                     });
              return inflate;
          }
     }
