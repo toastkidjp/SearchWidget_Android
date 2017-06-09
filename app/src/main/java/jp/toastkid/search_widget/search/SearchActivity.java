@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
 
     /** Search input. */
     @BindView(R.id.search_input)
-    public EditText mSearchInput;
+    public AppCompatEditText mSearchInput;
 
     /** Search category. */
     @BindView(R.id.search_categories)
