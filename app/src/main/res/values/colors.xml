@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#30AF3F</color>
     <color name="colorAccent">@color/white</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="spinner_background">#FFE0E0E0</color>
     <color name="soft_background">#FFF0F0F0</color>
     <color name="transparent">#00000000</color>
     <color name="darkgray_scale">#66000000</color>

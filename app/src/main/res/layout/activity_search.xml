@@ -68,13 +68,19 @@
             android:src="@drawable/ic_settings"
             />
     </LinearLayout>
+
+    <include layout="@layout/fake_shadow_1px"/>
+
     <Spinner
         android:id="@+id/search_categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown"
-        android:background="@color/soft_background"
+        android:background="@color/spinner_background"
         />
+
+    <include layout="@layout/fake_shadow_1px"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
