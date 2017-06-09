@@ -1,5 +1,6 @@
 package jp.toastkid.search_widget.search;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -97,6 +98,11 @@ public class SearchActivity extends AppCompatActivity {
 
         mSearchClose.setOnClickListener(v -> close());
         mFilter.setOnClickListener(v -> close());
+
+        final Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(SearchManager.QUERY)) {
+            search("WEB", intent.getStringExtra(SearchManager.QUERY));
+        }
     }
 
     private void initUrlFactory() {
