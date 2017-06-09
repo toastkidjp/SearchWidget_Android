@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WaStage - Simple Search Widget</string>
+    <string name="app_name">Simple Search App Widget - WaStage</string>
 
     <string name="action_settings">Settings</string>
     <string name="search_text">Let\'s search!</string>
@@ -10,4 +10,19 @@
     <string name="title_licenses">License information</string>
     <string name="title_close">close</string>
 
+    <string name="search_action_title">Search</string>
+
+    <string name="search_category_web">Web</string>
+    <string name="search_category_image">Image</string>
+    <string name="search_category_video">Video</string>
+    <string name="search_category_definition">Definition</string>
+    <string name="search_category_map">Map</string>
+    <string name="search_category_apps">Apps</string>
+    <string name="search_category_twitter">SNS</string>
+    <string name="search_category_youtube">YouTube</string>
+    <string name="search_category_wikipedia">Wikipedia</string>
+    <string name="search_category_shopping">Shopping</string>
+    <string name="settings_color_background_title">Background</string>
+    <string name="settings_color_font_title">Text</string>
+    <string name="settings_color_preview_title">Preview</string>
 </resources>
