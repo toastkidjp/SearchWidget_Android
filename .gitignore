@@ -1,3 +1,4 @@
+*.apk
 *.iml
 .gradle
 /local.properties
@@ -12,3 +13,5 @@ gradle/
 gradlew
 gradlew.bat
 .idea/
+ic_launcher-web.png
+ic_launcher_circle-web.png
