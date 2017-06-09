@@ -29,7 +29,10 @@ class RemoteViewsFactory {
                 = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         remoteViews.setOnClickPendingIntent(R.id.widget_search, makeSearchIntent(context));
         remoteViews.setOnClickPendingIntent(R.id.widget_settings, makeSettingsIntent(context));
-        remoteViews.setInt(R.id.widget_background, "setBackgroundColor", new PreferenceApplier(context).getColor());
+
+        final PreferenceApplier preferenceApplier = new PreferenceApplier(context);
+        remoteViews.setInt(R.id.widget_background, "setBackgroundColor", preferenceApplier.getColor());
+        remoteViews.setTextColor(R.id.widget_search_text, preferenceApplier.getFontColor());
         return remoteViews;
     }
 

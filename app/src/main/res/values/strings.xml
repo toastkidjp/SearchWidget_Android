@@ -20,4 +20,7 @@
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_free_book">青空文庫</string>
     <string name="search_category_shopping">ショッピング</string>
+    <string name="settings_color_background_title">背景</string>
+    <string name="settings_color_font_title">文字</string>
+    <string name="settings_color_preview_title">プレビュー</string>
 </resources>

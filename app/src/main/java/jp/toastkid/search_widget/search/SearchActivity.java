@@ -2,9 +2,11 @@ package jp.toastkid.search_widget.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -132,7 +134,6 @@ public class SearchActivity extends AppCompatActivity {
                 // NOP.
             }
         });
-        mBackground.setBackgroundColor(new PreferenceApplier(this).getColor());
         mSearchClose.setOnClickListener(v -> close());
         mFilter.setOnClickListener(v -> close());
     }
@@ -153,6 +154,20 @@ public class SearchActivity extends AppCompatActivity {
                 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(mSearchInput, 0);
         mFilter.setBackgroundColor(getResources().getColor(R.color.darkgray_scale));
+        applyColor();
+    }
+
+    private void applyColor() {
+        final PreferenceApplier preferenceApplier = new PreferenceApplier(this);
+        final int bgColor = preferenceApplier.getColor();
+        mBackground.setBackgroundColor(bgColor);
+        final int fontColor = preferenceApplier.getFontColor();
+        mSearchInput.setTextColor(fontColor);
+        mSearchInput.setHintTextColor(fontColor);
+        mSearchInput.setHighlightColor(fontColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(bgColor, 255));
+        }
     }
 
     private void close() {

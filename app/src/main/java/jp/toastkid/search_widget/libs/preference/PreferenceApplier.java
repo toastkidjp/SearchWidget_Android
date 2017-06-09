@@ -20,10 +20,18 @@ public class PreferenceApplier {
     }
 
     public int getColor() {
-        return mPreferences.getInt(Key.BG_COLOR.name(), Color.argb(128, 0, 66, 128));
+        return mPreferences.getInt(Key.BG_COLOR.name(), Color.argb(128, 0, 128, 66));
     }
 
     public void setColor(final int color) {
         mPreferences.edit().putInt(Key.BG_COLOR.name(), color).apply();
+    }
+
+    public int getFontColor() {
+        return mPreferences.getInt(Key.FONT_COLOR.name(), Color.WHITE);
+    }
+
+    public void setFontColor(final int color) {
+        mPreferences.edit().putInt(Key.FONT_COLOR.name(), color).apply();
     }
 }

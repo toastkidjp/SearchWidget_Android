@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,39 +15,16 @@
         android:id="@+id/settings_color"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/settings_item_height"
+        android:layout_marginLeft="@dimen/settings_item_left_margin"
         android:background="@color/soft_background"
         >
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/settings_color_text"
             android:drawableLeft="@drawable/ic_palette"
-            />
-
-        <com.flask.colorpicker.ColorPickerView
-            android:id="@+id/color_picker_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:alphaSlider="true"
-            app:density="12"
-            app:lightnessSlider="true"
-            app:wheelType="FLOWER"
-            app:lightnessSliderView="@+id/lightness_slider"
-            app:alphaSliderView="@+id/alpha_slider"
-            />
-
-        <com.flask.colorpicker.slider.LightnessSlider
-            android:id="@+id/lightness_slider"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            />
-
-        <com.flask.colorpicker.slider.AlphaSlider
-            android:id="@+id/alpha_slider"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
             />
     </LinearLayout>
 
@@ -57,11 +33,12 @@
     <TextView
         android:id="@+id/settings_licenses"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="15dp"
+        android:layout_height="@dimen/settings_item_height"
+        android:layout_marginLeft="@dimen/settings_item_left_margin"
         android:gravity="center_vertical"
         android:text="@string/title_licenses"
         android:drawableLeft="@drawable/ic_license"
+        android:background="@color/soft_background"
         />
 
     <include layout="@layout/primary_dark_divider" />
