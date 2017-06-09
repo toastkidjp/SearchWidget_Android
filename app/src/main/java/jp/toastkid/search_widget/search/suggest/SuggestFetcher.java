@@ -1,12 +1,15 @@
 package jp.toastkid.search_widget.search.suggest;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
+import jp.toastkid.search_widget.libs.Logger;
 import jp.toastkid.search_widget.libs.Utf8StringEncoder;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,7 +26,7 @@ public class SuggestFetcher {
 
     /** Suggest Web API. */
     private static final String URL
-            = "https://www.google.com/complete/search?hl=ja&output=toolbar&q=";
+            = "https://www.google.com/complete/search?&output=toolbar";
 
     /** HTTP client. */
     private OkHttpClient mClient;
@@ -46,7 +49,7 @@ public class SuggestFetcher {
      */
     public void fetchAsync(final String query, final Consumer<List<String>> consumer) {
         final Request request = new Request.Builder()
-                .url(URL + Utf8StringEncoder.encode(query))
+                .url(makeSuggestUrl(query))
                 .build();
         mClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -69,5 +72,16 @@ public class SuggestFetcher {
                 }
             }
         });
+    }
+
+    /**
+     * Make suggest Web API requesting URL.
+     * @param query Query
+     * @return suggest Web API requesting URL
+     */
+    @NonNull
+    private String makeSuggestUrl(@NonNull final String query) {
+        return URL + "&hl=" + Locale.getDefault().getLanguage()
+                + "&q=" + Utf8StringEncoder.encode(query);
     }
 }
