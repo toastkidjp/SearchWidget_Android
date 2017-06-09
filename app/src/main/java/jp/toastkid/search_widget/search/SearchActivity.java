@@ -36,7 +36,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.Logger;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
-import jp.toastkid.search_widget.search.suggest.SuggetFetcher;
+import jp.toastkid.search_widget.search.suggest.SuggestFetcher;
 import jp.toastkid.search_widget.settings.SettingsActivity;
 
 /**
@@ -62,17 +62,19 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_categories)
     public Spinner mSearchCategories;
 
+    /** Close button. */
     @BindView(R.id.search_close)
     public ImageView mSearchClose;
 
+    /** Suggest list. */
     @BindView(R.id.search_suggests)
     public ListView mSearchSuggests;
 
+    /** Search result URL factory. */
     private UrlFactory mUrlFactory;
 
+    /** Suggest Adapter. */
     private SuggestAdapter mSuggestAdapter;
-
-    private Map<String, List<String>> mCache;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -82,9 +84,25 @@ public class SearchActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
+        initUrlFactory();
+        initSuggests();
+        initSearchInput();
+
+        mSearchClose.setOnClickListener(v -> close());
+        mFilter.setOnClickListener(v -> close());
+    }
+
+    private void initUrlFactory() {
         mUrlFactory = new UrlFactory(this);
         mUrlFactory.initSpinner(mSearchCategories);
+    }
 
+    private void initSuggests() {
+        mSuggestAdapter = new SuggestAdapter(LayoutInflater.from(this));
+        mSearchSuggests.setAdapter(mSuggestAdapter);
+    }
+
+    private void initSearchInput() {
         mSearchInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId != EditorInfo.IME_ACTION_SEARCH) {
                 return false;
@@ -93,12 +111,11 @@ public class SearchActivity extends AppCompatActivity {
             return true;
         });
 
-        mSuggestAdapter = new SuggestAdapter(LayoutInflater.from(this));
-        mSearchSuggests.setAdapter(mSuggestAdapter);
-
-        mCache = new HashMap<>(30);
-        final SuggetFetcher fetcher = new SuggetFetcher();
         mSearchInput.addTextChangedListener(new TextWatcher() {
+
+            private final SuggestFetcher mFetcher = new SuggestFetcher();
+
+            private final Map<String, List<String>> mCache = new HashMap<>(30);
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -115,7 +132,7 @@ public class SearchActivity extends AppCompatActivity {
                     return;
                 }
 
-                fetcher.fetchAsync(key, suggests -> {
+                mFetcher.fetchAsync(key, suggests -> {
                     if (suggests == null || suggests.isEmpty()) {
                         Completable.create(e -> {
                             mSearchSuggests.setVisibility(View.GONE);
@@ -134,10 +151,12 @@ public class SearchActivity extends AppCompatActivity {
                 // NOP.
             }
         });
-        mSearchClose.setOnClickListener(v -> close());
-        mFilter.setOnClickListener(v -> close());
     }
 
+    /**
+     * Replace suggests with specified items.
+     * @param suggests
+     */
     private void replaceSuggests(final List<String> suggests) {
         runOnUiThread(() -> {
             mSearchSuggests.setVisibility(View.VISIBLE);
@@ -170,8 +189,19 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Close this activity.
+     */
     private void close() {
         finish();
+    }
+
+    /**
+     * Clear current input text.
+     */
+    @OnClick(R.id.search_clear)
+    public void clearInput() {
+        mSearchInput.setText("");
     }
 
     /**
@@ -182,6 +212,9 @@ public class SearchActivity extends AppCompatActivity {
         search(mSearchCategories.getSelectedItem().toString(), mSearchInput.getText().toString());
     }
 
+    /**
+     * Launch setting activity.
+     */
     @OnClick(R.id.settings)
     public void launchSettings() {
         startActivity(SettingsActivity.makeIntent(this));
@@ -203,6 +236,7 @@ public class SearchActivity extends AppCompatActivity {
      private class SuggestAdapter extends BaseAdapter {
 
          private final LayoutInflater mInflater;
+
          private final List<String> mSuggests;
 
          SuggestAdapter(final LayoutInflater inflater) {

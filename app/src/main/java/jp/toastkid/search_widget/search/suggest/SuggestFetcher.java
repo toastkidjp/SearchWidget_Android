@@ -19,7 +19,7 @@ import okhttp3.Response;
  *
  * @author toastkidjp
  */
-public class SuggetFetcher {
+public class SuggestFetcher {
 
     /** Suggest Web API. */
     private static final String URL
@@ -31,7 +31,7 @@ public class SuggetFetcher {
     /**
      * Initialize HTTP client.
      */
-    public SuggetFetcher() {
+    public SuggestFetcher() {
         mClient = new OkHttpClient.Builder()
                 .connectTimeout(3L, TimeUnit.SECONDS)
                 .readTimeout(3L, TimeUnit.SECONDS)
