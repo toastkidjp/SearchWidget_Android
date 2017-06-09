@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -36,6 +35,7 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.Logger;
+import jp.toastkid.search_widget.libs.network.NetworkChecker;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 import jp.toastkid.search_widget.search.suggest.SuggestFetcher;
 import jp.toastkid.search_widget.settings.SettingsActivity;
@@ -130,6 +130,10 @@ public class SearchActivity extends AppCompatActivity {
                 if (mCache.containsKey(key)) {
                     Logger.i("suggest: use cache " + s);
                     replaceSuggests(mCache.get(key));
+                    return;
+                }
+
+                if (NetworkChecker.isNotAvailable(SearchActivity.this)) {
                     return;
                 }
 
