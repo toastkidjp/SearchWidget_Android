@@ -2,12 +2,15 @@ package jp.toastkid.search_widget.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -71,6 +74,8 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_suggests)
     public ListView mSearchSuggests;
 
+    private PreferenceApplier mPreferenceApplier;
+
     /** Search result URL factory. */
     private UrlFactory mUrlFactory;
 
@@ -84,6 +89,7 @@ public class SearchActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        mPreferenceApplier = new PreferenceApplier(this);
 
         initUrlFactory();
         initSuggests();
@@ -182,7 +188,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void applyColor() {
-        final PreferenceApplier preferenceApplier = new PreferenceApplier(this);
+        final PreferenceApplier preferenceApplier = mPreferenceApplier;
         final int bgColor = preferenceApplier.getColor();
         mBackground.setBackgroundColor(bgColor);
         final int fontColor = preferenceApplier.getFontColor();
@@ -233,7 +239,11 @@ public class SearchActivity extends AppCompatActivity {
      */
     public void search(final String category, final String query) {
         final CustomTabsIntent intent = new CustomTabsIntent.Builder()
-                .setToolbarColor(new PreferenceApplier(this).getColor())
+                .setToolbarColor(mPreferenceApplier.getColor())
+                .setCloseButtonIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_back))
+                .setSecondaryToolbarColor(mPreferenceApplier.getFontColor())
+                .setStartAnimations(this, android.R.anim.fade_in, android.R.anim.fade_out)
+                .setExitAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .build();
         intent.launchUrl(this, mUrlFactory.make(category, query));
     }
