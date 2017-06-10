@@ -92,6 +92,30 @@
         android:text="@string/title_clear"
         android:textSize="16sp"
         />
+    <include layout="@layout/primary_dark_divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_item_height"
+        android:background="@color/soft_background"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/settings_item_left_margin"
+            android:layout_gravity="center_vertical|left"
+            android:text="@string/title_app_version"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/settings_app_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/settings_item_left_margin"
+            android:layout_gravity="center_vertical|right"
+            android:textSize="16sp"
+            />
+    </FrameLayout>
 
     <include layout="@layout/primary_dark_divider" />
 

@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.toastkid.search_widget.BaseActivity;
+import jp.toastkid.search_widget.BuildConfig;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.appwidget.Updater;
 import jp.toastkid.search_widget.libs.Toaster;
@@ -68,6 +69,8 @@ public class SettingsActivity extends BaseActivity {
                 })
                 .show());
         license.setOnClickListener(v -> new LicenseViewer(this).invoke());
+
+        ((TextView) findViewById(R.id.settings_app_version)).setText(BuildConfig.VERSION_NAME);
     }
 
     @Override
