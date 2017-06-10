@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.appwidget.Updater;
+import jp.toastkid.search_widget.libs.Toaster;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 
 /**
@@ -119,11 +120,13 @@ public class ColorSettingActivity extends BaseActivity {
         mPreferenceApplier.setFontColor(fontPalette.getColor());
         Updater.update(this);
         refresh();
+        Toaster.snackShort(toolbar, R.string.settings_color_done_commit, bgPalette.getColor());
     }
 
     @OnClick(R.id.settings_color_prev)
-    public void prev() {
+    public void reset() {
         setSavedColor();
+        Toaster.snackShort(toolbar, R.string.settings_color_done_reset, bgPalette.getColor());
     }
 
     @Override

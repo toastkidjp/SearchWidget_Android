@@ -32,4 +32,6 @@
     <string name="title_enable_suggest">検索入力補助を使う</string>
     <string name="settings_color_prev">元に戻す</string>
     <string name="settings_color_commit">決定</string>
+    <string name="settings_color_done_commit">色を変更しました。</string>
+    <string name="settings_color_done_reset">色を元に戻しました。</string>
 </resources>

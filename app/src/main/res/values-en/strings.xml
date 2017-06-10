@@ -33,4 +33,6 @@
     <string name="title_enable_suggest">Use search input suggestion</string>
     <string name="settings_color_prev">Clear</string>
     <string name="settings_color_commit">Commit</string>
+    <string name="settings_color_done_commit">It has been commit new color settings.</string>
+    <string name="settings_color_done_reset">It has been reset color settings.</string>
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -17,6 +16,7 @@ import butterknife.OnClick;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.appwidget.Updater;
+import jp.toastkid.search_widget.libs.Toaster;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 
 /**
@@ -63,10 +63,8 @@ public class SettingsActivity extends BaseActivity {
                     mPreferenceApplier.clear();
                     Updater.update(this);
                     refresh();
-                    final Snackbar snackbar
-                            = Snackbar.make(mToolbar, R.string.done_clear, Snackbar.LENGTH_SHORT);
-                    snackbar.getView().setBackgroundColor(mPreferenceApplier.getColor());
-                    snackbar.show();
+                    Toaster.snackShort(
+                            mToolbar, R.string.done_clear, mPreferenceApplier.getColor());
                 })
                 .show());
         license.setOnClickListener(v -> new LicenseViewer(this).invoke());
@@ -79,7 +77,8 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void refresh() {
-        applyColorToToolbar(mToolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
+        applyColorToToolbar(
+                mToolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
 
         mEnableSuggestCheck.setChecked(mPreferenceApplier.isEnableSuggest());
     }
