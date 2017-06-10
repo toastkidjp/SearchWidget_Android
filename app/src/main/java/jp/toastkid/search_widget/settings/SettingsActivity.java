@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.widget.BaseAdapter;
 
 import butterknife.BindView;
@@ -25,24 +28,42 @@ public class SettingsActivity extends BaseActivity {
     @BindView(R.id.settings_toolbar)
     public Toolbar toolbar;
 
+    private PreferenceApplier mPreferenceApplier;
+
     @Override
     public void onCreate(Bundle b) {
         super.onCreate(b);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
+
+        mPreferenceApplier = new PreferenceApplier(this);
         initToolbar(toolbar);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        final PreferenceApplier preferenceApplier = new PreferenceApplier(this);
-        applyColorToToolbar(toolbar, preferenceApplier.getColor(), preferenceApplier.getFontColor());
+        applyColorToToolbar(toolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
     }
 
     @OnClick(R.id.settings_color)
     public void color() {
         startActivity(ColorSettingActivity.makeIntent(this));
+    }
+
+    @OnClick(R.id.settings_clear)
+    public void clearSettings() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_clear)
+                .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, (d, i) -> d.cancel())
+                .setPositiveButton(R.string.ok,      (d, i) -> {
+                    mPreferenceApplier.clear();
+                    applyColorToToolbar(toolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
+                    Snackbar.make(toolbar, R.string.done_clear, Snackbar.LENGTH_SHORT).show();
+                })
+                .show();
     }
 
     @OnClick(R.id.settings_licenses)

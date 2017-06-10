@@ -25,4 +25,9 @@
     <string name="settings_color_background_title">Background</string>
     <string name="settings_color_font_title">Text</string>
     <string name="settings_color_preview_title">Preview</string>
+    <string name="title_clear">Clear all settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="confirm_clear_all_settings"><![CDATA[<font color="red">It can\'t cancel this operation.</font>]]></string>
+    <string name="done_clear">It has been done!</string>
 </resources>

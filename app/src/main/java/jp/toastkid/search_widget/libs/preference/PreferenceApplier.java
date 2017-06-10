@@ -34,4 +34,9 @@ public class PreferenceApplier {
     public void setFontColor(final int color) {
         mPreferences.edit().putInt(Key.FONT_COLOR.name(), color).apply();
     }
+
+    public void clear() {
+        mPreferences.edit().clear().apply();
+    }
+
 }

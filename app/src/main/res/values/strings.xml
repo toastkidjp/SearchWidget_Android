@@ -24,4 +24,9 @@
     <string name="settings_color_background_title">背景</string>
     <string name="settings_color_font_title">文字</string>
     <string name="settings_color_preview_title">プレビュー</string>
+    <string name="title_clear">設定を初期化</string>
+    <string name="cancel">キャンセル</string>
+    <string name="ok">OK</string>
+    <string name="confirm_clear_all_settings">すべての設定を削除しますか？<![CDATA[<font color="red">この操作は取り消せません。</font>]]></string>
+    <string name="done_clear">削除しました。</string>
 </resources>
