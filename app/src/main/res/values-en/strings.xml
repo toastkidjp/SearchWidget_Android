@@ -14,14 +14,15 @@
 
     <string name="search_category_web">Web</string>
     <string name="search_category_image">Image</string>
-    <string name="search_category_video">Video</string>
     <string name="search_category_definition">Definition</string>
     <string name="search_category_map">Map</string>
     <string name="search_category_apps">Apps</string>
     <string name="search_category_twitter">SNS</string>
-    <string name="search_category_youtube">YouTube</string>
+    <string name="search_category_youtube">Video</string>
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_shopping">Shopping</string>
+    <string name="search_category_technical_qa">Software technical Q &amp; A</string>
+
     <string name="settings_color_background_title">Background</string>
     <string name="settings_color_font_title">Text</string>
     <string name="settings_color_preview_title">Preview</string>

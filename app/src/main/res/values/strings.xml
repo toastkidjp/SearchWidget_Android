@@ -13,14 +13,14 @@
 
     <string name="search_category_web">Web</string>
     <string name="search_category_image">画像</string>
-    <string name="search_category_video">動画</string>
-    <string name="search_category_definition">定義</string>
     <string name="search_category_map">地図</string>
     <string name="search_category_apps">アプリ</string>
     <string name="search_category_twitter">SNS</string>
-    <string name="search_category_youtube">YouTube</string>
+    <string name="search_category_youtube">動画</string>
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_shopping">ショッピング</string>
+    <string name="search_category_technical_qa">ソフトウェア技術Ｑ＆Ａ</string>
+
     <string name="settings_color_background_title">背景</string>
     <string name="settings_color_font_title">文字</string>
     <string name="settings_color_preview_title">プレビュー</string>

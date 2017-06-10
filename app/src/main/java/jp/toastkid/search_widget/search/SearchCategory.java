@@ -20,10 +20,9 @@ enum SearchCategory {
             "https://duckduckgo.com/%s?ia=images&iax=1",
             String::format
     ),
-    VIDEO(R.string.search_category_video,
+    YOUTUBE(R.string.search_category_youtube,
             R.drawable.ic_video,
-            "https://duckduckgo.com/%s?ia=videos&iax=1",
-            String::format
+            "https://www.youtube.com/results?search_query="
     ),
     WIKIPEDIA(R.string.search_category_wikipedia,
             R.drawable.ic_library_books,
@@ -32,10 +31,6 @@ enum SearchCategory {
     TWITTER(R.string.search_category_twitter,
             R.drawable.ic_sns,
             "https://twitter.com/search?src=typd&q="
-    ),
-    YOUTUBE(R.string.search_category_youtube,
-            R.drawable.ic_youtube_searched,
-            "https://www.youtube.com/results?search_query="
     ),
     MAP(R.string.search_category_map,
             R.drawable.ic_map,
@@ -48,6 +43,10 @@ enum SearchCategory {
     AMAZON(R.string.search_category_shopping,
             R.drawable.ic_shopping,
             "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords="
+    ),
+    TECHNICAL(R.string.search_category_technical_qa,
+            R.drawable.ic_technical_qa,
+            "https://stackoverflow.com/search?q="
     )
     ;
 
