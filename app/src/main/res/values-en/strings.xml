@@ -30,4 +30,5 @@
     <string name="ok">OK</string>
     <string name="confirm_clear_all_settings"><![CDATA[<font color="red">It can\'t cancel this operation.</font>]]></string>
     <string name="done_clear">It has been done!</string>
+    <string name="title_enable_suggest">検索入力補助を使う</string>
 </resources>

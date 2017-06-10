@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +26,13 @@ import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 public class SettingsActivity extends BaseActivity {
 
     @BindView(R.id.settings_toolbar)
-    public Toolbar toolbar;
+    public Toolbar mToolbar;
+
+    @BindView(R.id.settings_enable_suggest_text)
+    public TextView mEnableSuggestText;
+
+    @BindView(R.id.settings_enable_suggest_check)
+    public CheckBox mEnableSuggestCheck;
 
     private PreferenceApplier mPreferenceApplier;
 
@@ -37,18 +43,29 @@ public class SettingsActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mPreferenceApplier = new PreferenceApplier(this);
-        initToolbar(toolbar);
+        initToolbar(mToolbar);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        applyColorToToolbar(toolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
+        refresh();
+    }
+
+    private void refresh() {
+        applyColorToToolbar(mToolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
+        mEnableSuggestCheck.setChecked(mPreferenceApplier.isEnableSuggest());
     }
 
     @OnClick(R.id.settings_color)
     public void color() {
         startActivity(ColorSettingActivity.makeIntent(this));
+    }
+
+    @OnClick(R.id.settings_enable_suggest)
+    public void switchSuggest() {
+        mPreferenceApplier.switchEnableSuggest();
+        mEnableSuggestCheck.setChecked(mPreferenceApplier.isEnableSuggest());
     }
 
     @OnClick(R.id.settings_clear)
@@ -60,8 +77,8 @@ public class SettingsActivity extends BaseActivity {
                 .setNegativeButton(R.string.cancel, (d, i) -> d.cancel())
                 .setPositiveButton(R.string.ok,      (d, i) -> {
                     mPreferenceApplier.clear();
-                    applyColorToToolbar(toolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
-                    Snackbar.make(toolbar, R.string.done_clear, Snackbar.LENGTH_SHORT).show();
+                    refresh();
+                    Snackbar.make(mToolbar, R.string.done_clear, Snackbar.LENGTH_SHORT).show();
                 })
                 .show();
     }

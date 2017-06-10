@@ -29,4 +29,5 @@
     <string name="ok">OK</string>
     <string name="confirm_clear_all_settings">すべての設定を削除しますか？<![CDATA[<font color="red">この操作は取り消せません。</font>]]></string>
     <string name="done_clear">削除しました。</string>
+    <string name="title_enable_suggest">検索入力補助を使う</string>
 </resources>

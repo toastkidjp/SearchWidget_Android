@@ -138,6 +138,11 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                if (mPreferenceApplier.isDisableSuggest()) {
+                    mSuggestAdapter.clear();
+                    return;
+                }
+
                 final String key = s.toString();
                 if (mCache.containsKey(key)) {
                     Logger.i("suggest: use cache " + s);
@@ -263,6 +268,11 @@ public class SearchActivity extends AppCompatActivity {
          SuggestAdapter(final LayoutInflater inflater) {
              mInflater = inflater;
              mSuggests = new ArrayList<>();
+         }
+
+         void clear() {
+             mSuggests.clear();
+             notifyDataSetChanged();
          }
 
          void replace(final List<String> strs) {

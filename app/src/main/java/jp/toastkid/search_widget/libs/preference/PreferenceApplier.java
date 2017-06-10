@@ -10,7 +10,7 @@ import android.graphics.Color;
 public class PreferenceApplier {
 
     private enum Key {
-        BG_COLOR, FONT_COLOR;
+        BG_COLOR, FONT_COLOR, ENABLE_SUGGEST;
     }
 
     private SharedPreferences mPreferences;
@@ -33,6 +33,18 @@ public class PreferenceApplier {
 
     public void setFontColor(final int color) {
         mPreferences.edit().putInt(Key.FONT_COLOR.name(), color).apply();
+    }
+
+    public boolean isEnableSuggest() {
+        return mPreferences.getBoolean(Key.ENABLE_SUGGEST.name(), true);
+    }
+
+    public boolean isDisableSuggest() {
+        return !isEnableSuggest();
+    }
+
+    public void switchEnableSuggest() {
+        mPreferences.edit().putBoolean(Key.ENABLE_SUGGEST.name(), !mPreferences.getBoolean(Key.ENABLE_SUGGEST.name(), true)).apply();
     }
 
     public void clear() {
