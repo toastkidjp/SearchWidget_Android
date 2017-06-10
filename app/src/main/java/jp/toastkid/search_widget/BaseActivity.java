@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.Window;
 
 import butterknife.BindView;
@@ -26,12 +27,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
         toolbar.setTitle(getTitleId());
         toolbar.inflateMenu(R.menu.settings_toolbar_menu);
-        toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.settings_toolbar_menu_exit) {
-                finish();
-            }
-            return true;
-        });
+        toolbar.setOnMenuItemClickListener(this::clickMenu);
+    }
+
+    protected boolean clickMenu(final MenuItem item) {
+        if (item.getItemId() == R.id.settings_toolbar_menu_exit) {
+            finish();
+        }
+        return true;
     }
 
     /**

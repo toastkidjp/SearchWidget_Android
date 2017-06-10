@@ -19,9 +19,11 @@ import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.TintContextWrapper;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -43,6 +45,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.Logger;
 import jp.toastkid.search_widget.libs.network.NetworkChecker;
@@ -55,15 +58,16 @@ import jp.toastkid.search_widget.settings.SettingsActivity;
  *
  * @author toastkidjp
  */
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
+
+
 
     /** Background filter. */
-    @BindView(R.id.search_background)
+    @BindView(R.id.search_background_filter)
     public View mFilter;
 
-    /** Searchbox background. */
-    @BindView(R.id.box_background)
-    public View mBackground;
+    @BindView(R.id.search_toolbar)
+    public Toolbar mToolbar;
 
     /** Search input. */
     @BindView(R.id.search_input)
@@ -73,19 +77,12 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_categories)
     public Spinner mSearchCategories;
 
-    /** Close button. */
-    @BindView(R.id.search_close)
-    public ImageView mSearchClose;
-
     /** Do on click action. */
     @BindView(R.id.search_action)
     public TextView mSearchAction;
 
     @BindView(R.id.search_clear)
     public ImageView mSearchClear;
-
-    @BindView(R.id.settings)
-    public ImageView mSettings;
 
     /** Suggest list. */
     @BindView(R.id.search_suggests)
@@ -111,8 +108,9 @@ public class SearchActivity extends AppCompatActivity {
         initUrlFactory();
         initSuggests();
         initSearchInput();
+        initToolbar(mToolbar);
+        mToolbar.inflateMenu(R.menu.search_toolbar_menu);
 
-        mSearchClose.setOnClickListener(v -> close());
         mFilter.setOnClickListener(v -> close());
 
         final Intent intent = getIntent();
@@ -127,7 +125,6 @@ public class SearchActivity extends AppCompatActivity {
         );
 
         mSearchClear.setOnClickListener(v -> mSearchInput.setText(""));
-        mSettings.setOnClickListener(v -> startActivity(SettingsActivity.makeIntent(this)));
 
     }
 
@@ -201,6 +198,15 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected boolean clickMenu(final MenuItem item) {
+        final int itemId = item.getItemId();
+        if (itemId == R.id.search_toolbar_menu_setting) {
+            startActivity(SettingsActivity.makeIntent(this));
+        }
+        return super.clickMenu(item);
+    }
+
     /**
      * Replace suggests with specified items.
      * @param suggests
@@ -227,8 +233,8 @@ public class SearchActivity extends AppCompatActivity {
     private void applyColor() {
         final PreferenceApplier preferenceApplier = mPreferenceApplier;
         final int bgColor = preferenceApplier.getColor();
-        mBackground.setBackgroundColor(bgColor);
         final int fontColor = preferenceApplier.getFontColor();
+        applyColorToToolbar(mToolbar, bgColor, fontColor);
         mSearchInput.setTextColor(fontColor);
         mSearchInput.setHintTextColor(fontColor);
         mSearchInput.setHighlightColor(fontColor);
@@ -239,9 +245,7 @@ public class SearchActivity extends AppCompatActivity {
         mSearchAction.setBackgroundColor(
                 ColorUtils.setAlphaComponent(mPreferenceApplier.getColor(), 128));
         mSearchAction.setTextColor(mPreferenceApplier.getFontColor());
-        mSearchClose.setColorFilter(mPreferenceApplier.getFontColor());
         mSearchClear.setColorFilter(mPreferenceApplier.getFontColor());
-        mSettings.setColorFilter(mPreferenceApplier.getFontColor());
     }
 
     /**
@@ -268,7 +272,12 @@ public class SearchActivity extends AppCompatActivity {
         intent.launchUrl(this, mUrlFactory.make(category, query));
     }
 
-     private class SuggestAdapter extends BaseAdapter {
+    @Override
+    protected int getTitleId() {
+        return R.string.search_action_title;
+    }
+
+    private class SuggestAdapter extends BaseAdapter {
 
          private final LayoutInflater mInflater;
 
@@ -328,7 +337,7 @@ public class SearchActivity extends AppCompatActivity {
      * @param context
      * @return launcher intent
      */
-    public static Intent makeIntent(Context context) {
+    public static Intent makeIntent(final Context context) {
         final Intent intent = new Intent(context, SearchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
