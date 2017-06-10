@@ -10,12 +10,17 @@ import android.text.Html;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.BuildConfig;
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.advertisement.AdInitializers;
 import jp.toastkid.search_widget.appwidget.Updater;
 import jp.toastkid.search_widget.libs.Toaster;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
@@ -45,6 +50,9 @@ public class SettingsActivity extends BaseActivity {
     @BindView(R.id.settings_enable_suggest_check)
     public CheckBox mEnableSuggestCheck;
 
+    @BindView(R.id.ad)
+    public AdView adView;
+
     private PreferenceApplier mPreferenceApplier;
 
     @Override
@@ -71,6 +79,12 @@ public class SettingsActivity extends BaseActivity {
         license.setOnClickListener(v -> new LicenseViewer(this).invoke());
 
         ((TextView) findViewById(R.id.settings_app_version)).setText(BuildConfig.VERSION_NAME);
+
+        initAdView();
+    }
+
+    private void initAdView() {
+        AdInitializers.find(getApplicationContext()).invoke(adView);
     }
 
     @Override

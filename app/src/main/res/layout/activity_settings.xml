@@ -2,6 +2,7 @@
 <LinearLayout
     android:id="@+id/settings_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -129,5 +130,29 @@
         android:background="@color/soft_background"
         android:text="@string/copyright"
         />
+
+    <include layout="@layout/primary_dark_divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_item_height"
+        android:gravity="center"
+        android:paddingLeft="@dimen/settings_item_left_margin"
+        android:background="@color/spinner_background"
+        android:text="広告"
+        />
+
+    <include layout="@layout/primary_dark_divider" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/production_banner_unit_id"
+        />
+
 
 </LinearLayout>

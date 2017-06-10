@@ -36,4 +36,8 @@
     <string name="settings_color_done_commit">It has been commit new color settings.</string>
     <string name="settings_color_done_reset">It has been reset color settings.</string>
     <string name="title_app_version">This app version</string>
+    
+    <string name="production_app_admob_id">ca-app-pub-5751262573448755~7910058629</string>
+    <string name="production_banner_unit_id">ca-app-pub-5751262573448755/9386791820</string>
+
 </resources>
