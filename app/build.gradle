@@ -4,12 +4,17 @@ apply plugin: 'me.tatarka.retrolambda'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+
+    byte verMajor  = 0;
+    byte verMiddle = 0;
+    byte verMinor  = 2;
+
     defaultConfig {
         applicationId "jp.toastkid.search_widget"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "0.0.2"
+        versionCode ((verMajor * 10000) + (verMiddle * 100) + verMinor)
+        versionName verMajor + "." + verMiddle + "." + verMinor
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
