@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="@color/initial_background"
+    android:background="@color/transparent"
     >
     <include layout="@layout/searchbox"/>
 </LinearLayout>
