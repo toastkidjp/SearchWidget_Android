@@ -3,16 +3,22 @@ package jp.toastkid.search_widget.search;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.TintContextWrapper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -71,6 +77,16 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_close)
     public ImageView mSearchClose;
 
+    /** Do on click action. */
+    @BindView(R.id.search_action)
+    public TextView mSearchAction;
+
+    @BindView(R.id.search_clear)
+    public ImageView mSearchClear;
+
+    @BindView(R.id.settings)
+    public ImageView mSettings;
+
     /** Suggest list. */
     @BindView(R.id.search_suggests)
     public ListView mSearchSuggests;
@@ -103,6 +119,16 @@ public class SearchActivity extends AppCompatActivity {
         if (intent != null && intent.hasExtra(SearchManager.QUERY)) {
             search("WEB", intent.getStringExtra(SearchManager.QUERY));
         }
+
+        mSearchAction.setOnClickListener(v -> search(
+                mSearchCategories.getSelectedItem().toString(),
+                mSearchInput.getText().toString()
+                )
+        );
+
+        mSearchClear.setOnClickListener(v -> mSearchInput.setText(""));
+        mSettings.setOnClickListener(v -> startActivity(SettingsActivity.makeIntent(this)));
+
     }
 
     private void initUrlFactory() {
@@ -209,6 +235,13 @@ public class SearchActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(bgColor, 255));
         }
+
+        mSearchAction.setBackgroundColor(
+                ColorUtils.setAlphaComponent(mPreferenceApplier.getColor(), 128));
+        mSearchAction.setTextColor(mPreferenceApplier.getFontColor());
+        mSearchClose.setColorFilter(mPreferenceApplier.getFontColor());
+        mSearchClear.setColorFilter(mPreferenceApplier.getFontColor());
+        mSettings.setColorFilter(mPreferenceApplier.getFontColor());
     }
 
     /**
@@ -216,30 +249,6 @@ public class SearchActivity extends AppCompatActivity {
      */
     private void close() {
         finish();
-    }
-
-    /**
-     * Clear current input text.
-     */
-    @OnClick(R.id.search_clear)
-    public void clearInput() {
-        mSearchInput.setText("");
-    }
-
-    /**
-     * Do on click action.
-     */
-    @OnClick(R.id.search_action)
-    public void clickSearchAction() {
-        search(mSearchCategories.getSelectedItem().toString(), mSearchInput.getText().toString());
-    }
-
-    /**
-     * Launch setting activity.
-     */
-    @OnClick(R.id.settings)
-    public void launchSettings() {
-        startActivity(SettingsActivity.makeIntent(this));
     }
 
     /**

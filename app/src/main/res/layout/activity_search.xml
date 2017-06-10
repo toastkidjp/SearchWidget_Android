@@ -67,6 +67,7 @@
             android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_settings"
+            android:visibility="gone"
             />
     </LinearLayout>
 

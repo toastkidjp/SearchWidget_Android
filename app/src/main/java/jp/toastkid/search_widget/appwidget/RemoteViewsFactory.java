@@ -32,6 +32,9 @@ class RemoteViewsFactory {
 
         final PreferenceApplier preferenceApplier = new PreferenceApplier(context);
         remoteViews.setInt(R.id.widget_background, "setBackgroundColor", preferenceApplier.getColor());
+        remoteViews.setInt(R.id.widget_search_border, "setBackgroundColor", preferenceApplier.getFontColor());
+        remoteViews.setInt(R.id.widget_search_image, "setColorFilter", preferenceApplier.getFontColor());
+        remoteViews.setInt(R.id.widget_settings, "setColorFilter", preferenceApplier.getFontColor());
         remoteViews.setTextColor(R.id.widget_search_text, preferenceApplier.getFontColor());
         return remoteViews;
     }
