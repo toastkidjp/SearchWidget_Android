@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.appwidget.Updater;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 
 /**
@@ -77,6 +78,7 @@ public class SettingsActivity extends BaseActivity {
                 .setNegativeButton(R.string.cancel, (d, i) -> d.cancel())
                 .setPositiveButton(R.string.ok,      (d, i) -> {
                     mPreferenceApplier.clear();
+                    Updater.update(this);
                     refresh();
                     Snackbar.make(mToolbar, R.string.done_clear, Snackbar.LENGTH_SHORT).show();
                 })

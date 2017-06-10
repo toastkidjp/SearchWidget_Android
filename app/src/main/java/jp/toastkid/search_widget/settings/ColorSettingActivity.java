@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.appwidget.Updater;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 
 /**
@@ -116,7 +117,7 @@ public class ColorSettingActivity extends BaseActivity {
     public void ok() {
         mPreferenceApplier.setColor(bgPalette.getColor());
         mPreferenceApplier.setFontColor(fontPalette.getColor());
-        sendBroadcast(new Intent("UPDATE_WIDGET"));
+        Updater.update(this);
         refresh();
     }
 
