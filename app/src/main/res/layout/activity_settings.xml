@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/settings_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkgray_scale"
     >
     <android.support.v7.widget.Toolbar
         android:id="@+id/settings_toolbar"
@@ -11,6 +13,7 @@
         android:layout_height="56dp"
         android:minHeight="?android:actionBarSize"
         />
+
     <LinearLayout
         android:id="@+id/settings_color"
         android:orientation="vertical"
@@ -20,6 +23,7 @@
         android:background="@color/soft_background"
         >
         <TextView
+            android:id="@+id/settings_color_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -43,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/settings_item_left_margin"
-            android:drawableLeft="@drawable/ic_close"
+            android:drawableLeft="@drawable/ic_assist"
             android:gravity="center_vertical"
             android:text="@string/title_enable_suggest"
             android:textSize="16sp"
@@ -63,8 +67,6 @@
 
     <include layout="@layout/primary_dark_divider" />
 
-    <include layout="@layout/primary_dark_divider" />
-
     <TextView
         android:id="@+id/settings_licenses"
         android:layout_width="match_parent"
@@ -74,25 +76,34 @@
         android:drawableLeft="@drawable/ic_license"
         android:gravity="center_vertical"
         android:text="@string/title_licenses"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        />
 
     <include layout="@layout/primary_dark_divider" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/copyright"
-        />
 
     <TextView
         android:id="@+id/settings_clear"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
         android:background="@color/soft_background"
-        android:drawableLeft="@drawable/ic_close"
+        android:drawableLeft="@drawable/ic_close_black"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/settings_item_left_margin"
         android:text="@string/title_clear"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        />
+
+    <include layout="@layout/primary_dark_divider" />
+
+    <include layout="@layout/primary_dark_divider" />
+    <include layout="@layout/primary_dark_divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/soft_background"
+        android:text="@string/copyright"
+        />
+
 </LinearLayout>

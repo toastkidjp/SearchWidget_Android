@@ -32,6 +32,15 @@ public class SettingsActivity extends BaseActivity {
     @BindView(R.id.settings_enable_suggest_text)
     public TextView mEnableSuggestText;
 
+    @BindView(R.id.settings_clear)
+    public TextView clear;
+
+    @BindView(R.id.settings_color_text)
+    public TextView colorText;
+
+    @BindView(R.id.settings_licenses)
+    public TextView license;
+
     @BindView(R.id.settings_enable_suggest_check)
     public CheckBox mEnableSuggestCheck;
 
@@ -45,6 +54,22 @@ public class SettingsActivity extends BaseActivity {
 
         mPreferenceApplier = new PreferenceApplier(this);
         initToolbar(mToolbar);
+        clear.setOnClickListener(v -> new AlertDialog.Builder(this)
+                .setTitle(R.string.title_clear)
+                .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, (d, i) -> d.cancel())
+                .setPositiveButton(R.string.ok,      (d, i) -> {
+                    mPreferenceApplier.clear();
+                    Updater.update(this);
+                    refresh();
+                    final Snackbar snackbar
+                            = Snackbar.make(mToolbar, R.string.done_clear, Snackbar.LENGTH_SHORT);
+                    snackbar.getView().setBackgroundColor(mPreferenceApplier.getColor());
+                    snackbar.show();
+                })
+                .show());
+        license.setOnClickListener(v -> new LicenseViewer(this).invoke());
     }
 
     @Override
@@ -55,6 +80,7 @@ public class SettingsActivity extends BaseActivity {
 
     private void refresh() {
         applyColorToToolbar(mToolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
+
         mEnableSuggestCheck.setChecked(mPreferenceApplier.isEnableSuggest());
     }
 
@@ -69,25 +95,9 @@ public class SettingsActivity extends BaseActivity {
         mEnableSuggestCheck.setChecked(mPreferenceApplier.isEnableSuggest());
     }
 
-    @OnClick(R.id.settings_clear)
-    public void clearSettings() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.title_clear)
-                .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                .setCancelable(true)
-                .setNegativeButton(R.string.cancel, (d, i) -> d.cancel())
-                .setPositiveButton(R.string.ok,      (d, i) -> {
-                    mPreferenceApplier.clear();
-                    Updater.update(this);
-                    refresh();
-                    Snackbar.make(mToolbar, R.string.done_clear, Snackbar.LENGTH_SHORT).show();
-                })
-                .show();
-    }
-
-    @OnClick(R.id.settings_licenses)
-    public void license() {
-        new LicenseViewer(this).invoke();
+    @OnClick(R.id.settings_background)
+    public void close() {
+        finish();
     }
 
     @Override
