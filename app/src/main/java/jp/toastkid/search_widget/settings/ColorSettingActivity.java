@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.larswerkman.holocolorpicker.ColorPicker;
@@ -14,6 +15,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
@@ -46,13 +48,17 @@ public class ColorSettingActivity extends BaseActivity {
     @BindView(R.id.font_opacitybar)
     public OpacityBar fontOpacityBar;
 
-    @BindView(R.id.settings_color_preview_background)
-    public View previewBackground;
+    @BindView(R.id.settings_color_ok)
+    public Button ok;
 
-    @BindView(R.id.widget_search_text)
-    public TextView previewText;
+    @BindView(R.id.settings_color_prev)
+    public Button prev;
 
     private PreferenceApplier mPreferenceApplier;
+
+    private int initialBgColor;
+
+    private int initialFontColor;
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -62,35 +68,61 @@ public class ColorSettingActivity extends BaseActivity {
 
         mPreferenceApplier = new PreferenceApplier(this);
 
+        initialFontColor = mPreferenceApplier.getFontColor();
+        prev.setTextColor(initialFontColor);
+
+        initialBgColor = mPreferenceApplier.getColor();
+        prev.setBackgroundColor(initialBgColor);
+
         initPalette();
         initToolbar(toolbar);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        applyColorToToolbar(toolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
     }
 
     private void initPalette() {
         bgPalette.addSVBar(bgSvBar);
         bgPalette.addOpacityBar(bgOpacityBar);
-        bgPalette.setOnColorChangedListener(c -> previewBackground.setBackgroundColor(c));
+        bgPalette.setOnColorChangedListener(c -> {
+            toolbar.setBackgroundColor(c);
+            ok.setBackgroundColor(c);
+        });
 
         fontPalette.addSVBar(fontSvBar);
         fontPalette.addOpacityBar(fontOpacityBar);
-        fontPalette.setOnColorChangedListener(c -> previewText.setTextColor(c));
+        fontPalette.setOnColorChangedListener(c -> {
+            toolbar.setTitleTextColor(c);
+            ok.setTextColor(c);
+        });
 
-        bgPalette.setColor(mPreferenceApplier.getColor());
-        fontPalette.setColor(mPreferenceApplier.getFontColor());
+        setSavedColor();
+    }
+
+    private void setSavedColor() {
+        bgPalette.setColor(initialBgColor);
+        fontPalette.setColor(initialFontColor);
+        applyColorToToolbar(toolbar, initialBgColor, initialFontColor);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    private void refresh() {
+        applyColorToToolbar(toolbar, mPreferenceApplier.getColor(), mPreferenceApplier.getFontColor());
+    }
+
+    @OnClick(R.id.settings_color_ok)
+    public void ok() {
         mPreferenceApplier.setColor(bgPalette.getColor());
         mPreferenceApplier.setFontColor(fontPalette.getColor());
         sendBroadcast(new Intent("UPDATE_WIDGET"));
+        refresh();
+    }
+
+    @OnClick(R.id.settings_color_prev)
+    public void prev() {
+        setSavedColor();
     }
 
     @Override

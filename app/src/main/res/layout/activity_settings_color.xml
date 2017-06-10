@@ -11,19 +11,6 @@
         android:layout_height="56dp"
         android:minHeight="?android:actionBarSize"
         />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_color_preview_title"
-        android:textSize="16sp"
-        />
-    <FrameLayout
-        android:id="@+id/settings_color_preview_background"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        >
-        <include layout="@layout/searchbox" />
-    </FrameLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -92,4 +79,34 @@
                 />
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        >
+        <Button
+            android:id="@+id/settings_color_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:text="@string/settings_color_commit"
+            android:textSize="16sp"
+            style="?android:attr/buttonBarStyle"
+            />
+
+        <Button
+            android:id="@+id/settings_color_prev"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:text="@string/settings_color_prev"
+            android:textSize="16sp"
+            style="?android:attr/buttonBarStyle"
+            />
+    </LinearLayout>
+
 </LinearLayout>
