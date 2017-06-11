@@ -30,3 +30,12 @@
 ## For Retrolambda
 -dontwarn java.lang.invoke.*
 -dontwarn **$$Lambda$*
+
+## For use AdMob
+-keep public class com.google.android.gms.ads.** {
+   public *;
+}
+
+-keep public class com.google.ads.** {
+   public *;
+}

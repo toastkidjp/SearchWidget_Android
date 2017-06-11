@@ -262,6 +262,12 @@ public class SearchActivity extends BaseActivity {
      * @param query    search query
      */
     public void search(final String category, final String query) {
+
+        final Bundle bundle = new Bundle();
+        bundle.putString("category", category);
+        bundle.putString("query", query);
+        sendLog("search", bundle);
+
         final CustomTabsIntent intent = new CustomTabsIntent.Builder()
                 .setToolbarColor(mPreferenceApplier.getColor())
                 .setCloseButtonIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_back))

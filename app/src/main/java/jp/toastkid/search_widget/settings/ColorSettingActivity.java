@@ -116,11 +116,20 @@ public class ColorSettingActivity extends BaseActivity {
 
     @OnClick(R.id.settings_color_ok)
     public void ok() {
-        mPreferenceApplier.setColor(bgPalette.getColor());
-        mPreferenceApplier.setFontColor(fontPalette.getColor());
+        final int bgColor = bgPalette.getColor();
+        mPreferenceApplier.setColor(bgColor);
+
+        int fontColor = fontPalette.getColor();
+        mPreferenceApplier.setFontColor(fontColor);
+
         Updater.update(this);
         refresh();
-        Toaster.snackShort(toolbar, R.string.settings_color_done_commit, bgPalette.getColor());
+        Toaster.snackShort(toolbar, R.string.settings_color_done_commit, bgColor);
+
+        final Bundle bundle = new Bundle();
+        bundle.putString("bg",   Integer.toHexString(bgColor));
+        bundle.putString("font", Integer.toHexString(fontColor));
+        sendLog("color_set", bundle);
     }
 
     @OnClick(R.id.settings_color_prev)
