@@ -6,9 +6,8 @@
     <string name="search_text">Let\'s search!</string>
     <string name="settings_color_text">Color settings</string>
     <string name="copyright">(c) toastkidjp</string>
-    <string name="search_exit_text">Exit</string>
+    <string name="close">Close</string>
     <string name="title_licenses">License information</string>
-    <string name="title_close">close</string>
 
     <string name="search_action_title">Search</string>
 

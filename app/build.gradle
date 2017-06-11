@@ -5,9 +5,9 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
-    byte verMajor  = 0;
+    byte verMajor  = 1;
     byte verMiddle = 0;
-    byte verMinor  = 3;
+    byte verMinor  = 0;
 
     defaultConfig {
         applicationId "jp.toastkid.search_widget"
