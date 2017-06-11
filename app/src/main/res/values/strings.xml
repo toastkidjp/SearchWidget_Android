@@ -5,9 +5,9 @@
     <string name="search_text">検索</string>
     <string name="settings_color_text">色設定</string>
     <string name="copyright">(c) toastkidjp</string>
-    <string name="search_exit_text">終了</string>
+    <string name="close">閉じる</string>
+
     <string name="title_licenses">ライセンス情報</string>
-    <string name="title_close">閉じる</string>
 
     <string name="search_action_title">検索</string>
 

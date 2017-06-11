@@ -6,7 +6,7 @@
     tools:context=".settings.SettingsActivity">
     <item
         android:id="@+id/settings_toolbar_menu_exit"
-        android:title="@string/search_exit_text"
+        android:title="@string/close"
         android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

@@ -52,11 +52,11 @@ class LicenseViewer {
                                     .setTitle(items[index])
                                     .setMessage(licenseMap.get(items[index]))
                                     .setCancelable(true)
-                                    .setPositiveButton(R.string.title_close, (dialog, i) -> dialog.dismiss())
+                                    .setPositiveButton(R.string.close, (dialog, i) -> dialog.dismiss())
                                     .show()
                     )
                     .setCancelable(true)
-                    .setPositiveButton(R.string.title_close, (d, i) -> d.dismiss())
+                    .setPositiveButton(R.string.close, (d, i) -> d.dismiss())
                     .show();
         } catch (final IOException e) {
             e.printStackTrace();
