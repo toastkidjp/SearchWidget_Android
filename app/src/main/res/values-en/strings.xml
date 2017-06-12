@@ -38,5 +38,7 @@
     
     <string name="production_app_admob_id">ca-app-pub-5751262573448755~7910058629</string>
     <string name="production_banner_unit_id">ca-app-pub-5751262573448755/9386791820</string>
+    <string name="title_advertisement_1">A</string>
+    <string name="title_advertisement_2">D</string>
 
 </resources>
