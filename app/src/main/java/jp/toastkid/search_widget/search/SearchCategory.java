@@ -1,5 +1,7 @@
 package jp.toastkid.search_widget.search;
 
+import java.util.Locale;
+
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.Utf8StringEncoder;
 
@@ -26,7 +28,8 @@ enum SearchCategory {
     ),
     WIKIPEDIA(R.string.search_category_wikipedia,
             R.drawable.ic_library_books,
-            "https://ja.wikipedia.org/w/index.php?search="
+            "https://%s.wikipedia.org/w/index.php?search=",
+            (h, q) -> String.format(h, Locale.getDefault().getLanguage()) + Utf8StringEncoder.encode(q)
     ),
     TWITTER(R.string.search_category_twitter,
             R.drawable.ic_sns,
@@ -42,7 +45,13 @@ enum SearchCategory {
     ),
     AMAZON(R.string.search_category_shopping,
             R.drawable.ic_shopping,
-            "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords="
+            "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords=",
+            (h, q) -> {
+                if (Locale.JAPANESE.getLanguage().equals(Locale.getDefault().getLanguage())) {
+                    return h + Utf8StringEncoder.encode(q);
+                }
+                return "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Utf8StringEncoder.encode(q);
+            }
     ),
     TECHNICAL(R.string.search_category_technical_qa,
             R.drawable.ic_technical_qa,
