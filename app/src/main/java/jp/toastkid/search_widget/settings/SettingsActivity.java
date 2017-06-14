@@ -10,9 +10,7 @@ import android.text.Html;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +22,7 @@ import jp.toastkid.search_widget.advertisement.AdInitializers;
 import jp.toastkid.search_widget.appwidget.Updater;
 import jp.toastkid.search_widget.libs.Toaster;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
+import jp.toastkid.search_widget.settings.color.ColorSettingActivity;
 
 /**
  * Settings activity.

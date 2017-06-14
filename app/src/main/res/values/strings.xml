@@ -34,11 +34,15 @@
     <string name="settings_color_commit">決定</string>
     <string name="settings_color_done_commit">色を変更しました。</string>
     <string name="settings_color_done_reset">色を元に戻しました。</string>
+    <string name="settings_color_delete">削除しました。</string>
     <string name="title_app_version">アプリのバージョン</string>
 
     <string name="production_app_admob_id">ca-app-pub-5751262573448755~7910058629</string>
     <string name="production_banner_unit_id">ca-app-pub-5751262573448755/9386791820</string>
     <string name="title_advertisement_1">広</string>
     <string name="title_advertisement_2">告</string>
+    <string name="settings_color_saved_title">保存した色</string>
+    <string name="settings_color_saved_text">長押しすると削除できます。</string>
+    <string name="title_clear_saved_color">すべて削除</string>
 
 </resources>
