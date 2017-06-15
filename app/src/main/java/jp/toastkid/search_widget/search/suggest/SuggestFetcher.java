@@ -1,7 +1,6 @@
 package jp.toastkid.search_widget.search.suggest;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
-import jp.toastkid.search_widget.libs.Logger;
 import jp.toastkid.search_widget.libs.Utf8StringEncoder;
 import okhttp3.Call;
 import okhttp3.Callback;

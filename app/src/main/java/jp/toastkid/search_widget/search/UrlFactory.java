@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import jp.toastkid.search_widget.R;
-import jp.toastkid.search_widget.libs.Utf8StringEncoder;
 
 /**
  * @author toastkidjp
