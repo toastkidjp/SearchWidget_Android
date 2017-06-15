@@ -1,9 +1,10 @@
 package jp.toastkid.search_widget.search;
 
+import android.net.Uri;
+
 import java.util.Locale;
 
 import jp.toastkid.search_widget.R;
-import jp.toastkid.search_widget.libs.Utf8StringEncoder;
 
 /**
  * Web search category.
@@ -29,7 +30,7 @@ enum SearchCategory {
     WIKIPEDIA(R.string.search_category_wikipedia,
             R.drawable.ic_library_books,
             "https://%s.wikipedia.org/w/index.php?search=",
-            (h, q) -> String.format(h, Locale.getDefault().getLanguage()) + Utf8StringEncoder.encode(q)
+            (h, q) -> String.format(h, Locale.getDefault().getLanguage()) + Uri.encode(q)
     ),
     TWITTER(R.string.search_category_twitter,
             R.drawable.ic_sns,
@@ -48,9 +49,9 @@ enum SearchCategory {
             "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords=",
             (h, q) -> {
                 if (Locale.JAPANESE.getLanguage().equals(Locale.getDefault().getLanguage())) {
-                    return h + Utf8StringEncoder.encode(q);
+                    return h + Uri.encode(q);
                 }
-                return "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Utf8StringEncoder.encode(q);
+                return "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Uri.encode(q);
             }
     ),
     TECHNICAL(R.string.search_category_technical_qa,
@@ -75,7 +76,7 @@ enum SearchCategory {
     private Generator mGenerator;
 
     SearchCategory(final int id, final int iconId, final String host) {
-        this(id, iconId, host, (h, q) -> h + Utf8StringEncoder.encode(q));
+        this(id, iconId, host, (h, q) -> h + Uri.encode(q));
     }
 
     SearchCategory(final int id, final int iconId, final String host, final Generator generator) {
