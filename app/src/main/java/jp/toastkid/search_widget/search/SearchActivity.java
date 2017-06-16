@@ -3,11 +3,9 @@ package jp.toastkid.search_widget.search;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -16,17 +14,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +36,7 @@ import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.Logger;
 import jp.toastkid.search_widget.libs.network.NetworkChecker;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
+import jp.toastkid.search_widget.search.suggest.SuggestAdapter;
 import jp.toastkid.search_widget.search.suggest.SuggestFetcher;
 import jp.toastkid.search_widget.settings.SettingsActivity;
 
@@ -81,6 +77,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.search_suggests)
     public ListView mSearchSuggests;
 
+    /** Preference applier. */
     private PreferenceApplier mPreferenceApplier;
 
     /** Search result URL factory. */
@@ -120,7 +117,11 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void initSuggests() {
-        mSuggestAdapter = new SuggestAdapter(LayoutInflater.from(this));
+        mSuggestAdapter = new SuggestAdapter(
+                LayoutInflater.from(this),
+                mSearchInput,
+                suggest -> search(mSearchCategories.getSelectedItem().toString(), suggest)
+                );
         mSearchSuggests.setAdapter(mSuggestAdapter);
     }
 
@@ -154,7 +155,6 @@ public class SearchActivity extends BaseActivity {
 
                 final String key = s.toString();
                 if (mCache.containsKey(key)) {
-                    Logger.i("suggest: use cache " + s);
                     replaceSuggests(mCache.get(key));
                     return;
                 }
@@ -171,7 +171,6 @@ public class SearchActivity extends BaseActivity {
                         }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
                         return;
                     }
-                    Logger.i("suggest: fetch " + s + " " + suggests);
                     replaceSuggests(suggests);
                     mCache.put(key, suggests);
                 });
@@ -254,74 +253,16 @@ public class SearchActivity extends BaseActivity {
         bundle.putString("query", query);
         sendLog("search", bundle);
 
-        final CustomTabsIntent intent = new CustomTabsIntent.Builder()
-                .setToolbarColor(mPreferenceApplier.getColor())
-                .setCloseButtonIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_back))
-                .setSecondaryToolbarColor(mPreferenceApplier.getFontColor())
-                .setStartAnimations(this, android.R.anim.fade_in, android.R.anim.fade_out)
-                .setExitAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .build();
-        intent.launchUrl(this, mUrlFactory.make(category, query));
+        new SearchIntentLauncher(this)
+                .setBackgroundColor(mPreferenceApplier.getColor())
+                .setFontColor(mPreferenceApplier.getFontColor())
+                .setUri(mUrlFactory.make(category, query))
+                .invoke();
     }
 
     @Override
     protected int getTitleId() {
         return R.string.search_action_title;
-    }
-
-    private class SuggestAdapter extends BaseAdapter {
-
-         private final LayoutInflater mInflater;
-
-         private final List<String> mSuggests;
-
-         SuggestAdapter(final LayoutInflater inflater) {
-             mInflater = inflater;
-             mSuggests = new ArrayList<>();
-         }
-
-         void clear() {
-             mSuggests.clear();
-             notifyDataSetChanged();
-         }
-
-         void replace(final List<String> strs) {
-             mSuggests.clear();
-             mSuggests.addAll(strs);
-         }
-
-         @Override
-         public int getCount() {
-             return mSuggests.size();
-         }
-
-         @Override
-         public Object getItem(int position) {
-             return mSuggests.get(position);
-         }
-
-         @Override
-         public long getItemId(int position) {
-             return mSuggests.get(position).hashCode();
-         }
-
-         @Override
-         public View getView(int position, View convertView, ViewGroup parent) {
-             final View inflate = mInflater.inflate(R.layout.search_suggest, null);
-             final TextView textView = (TextView) inflate.findViewById(R.id.search_suggest_text);
-             final String suggest = mSuggests.get(position);
-             textView.setText(suggest);
-             inflate.findViewById(R.id.search_suggest_add).setOnClickListener(v -> {
-                 mSearchInput.setText(suggest + " ");
-                 mSearchInput.setSelection(mSearchInput.getText().toString().length());
-             });
-             inflate.setOnClickListener(
-                     v -> {
-                         mSearchInput.setText(suggest);
-                         search(mSearchCategories.getSelectedItem().toString(), suggest);
-                     });
-             return inflate;
-         }
     }
 
     @OnClick(R.id.search_action)
@@ -339,4 +280,5 @@ public class SearchActivity extends BaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
+
 }
