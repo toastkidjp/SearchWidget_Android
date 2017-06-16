@@ -33,6 +33,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.BaseActivity;
@@ -50,8 +51,6 @@ import jp.toastkid.search_widget.settings.SettingsActivity;
  */
 public class SearchActivity extends BaseActivity {
 
-
-
     /** Background filter. */
     @BindView(R.id.search_background_filter)
     public View mFilter;
@@ -66,6 +65,10 @@ public class SearchActivity extends BaseActivity {
     /** Search category. */
     @BindView(R.id.search_categories)
     public Spinner mSearchCategories;
+
+    /** Do on click action's background. */
+    @BindView(R.id.search_action_background)
+    public View mSearchActionBackground;
 
     /** Do on click action. */
     @BindView(R.id.search_action)
@@ -108,14 +111,7 @@ public class SearchActivity extends BaseActivity {
             search("WEB", intent.getStringExtra(SearchManager.QUERY));
         }
 
-        mSearchAction.setOnClickListener(v -> search(
-                mSearchCategories.getSelectedItem().toString(),
-                mSearchInput.getText().toString()
-                )
-        );
-
         mSearchClear.setOnClickListener(v -> mSearchInput.setText(""));
-
     }
 
     private void initUrlFactory() {
@@ -232,7 +228,7 @@ public class SearchActivity extends BaseActivity {
             getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(bgColor, 255));
         }
 
-        mSearchAction.setBackgroundColor(
+        mSearchActionBackground.setBackgroundColor(
                 ColorUtils.setAlphaComponent(mPreferenceApplier.getColor(), 128));
         mSearchAction.setTextColor(mPreferenceApplier.getFontColor());
         mSearchClear.setColorFilter(mPreferenceApplier.getFontColor());
@@ -326,6 +322,11 @@ public class SearchActivity extends BaseActivity {
                      });
              return inflate;
          }
+    }
+
+    @OnClick(R.id.search_action)
+    public void clickSearch() {
+        search(mSearchCategories.getSelectedItem().toString(), mSearchInput.getText().toString());
     }
 
     /**

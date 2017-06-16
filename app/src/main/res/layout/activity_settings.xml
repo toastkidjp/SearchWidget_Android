@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
         android:paddingLeft="@dimen/settings_item_left_margin"
-        android:background="@color/soft_background"
+        android:background="@drawable/ripple"
         >
         <TextView
             android:id="@+id/settings_color_text"
@@ -40,7 +40,7 @@
         android:id="@+id/settings_enable_suggest"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
-        android:background="@color/soft_background"
+        android:background="@drawable/ripple"
         >
 
         <TextView
@@ -72,12 +72,12 @@
         android:id="@+id/settings_clear"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
-        android:background="@color/soft_background"
         android:drawableLeft="@drawable/ic_close_black"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/settings_item_left_margin"
         android:text="@string/title_clear"
         android:textSize="16sp"
+        android:background="@drawable/ripple"
         />
 
     <include layout="@layout/primary_dark_divider"
@@ -135,11 +135,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
         android:paddingLeft="@dimen/settings_item_left_margin"
-        android:background="@color/soft_background"
         android:drawableLeft="@drawable/ic_license"
         android:gravity="center_vertical"
         android:text="@string/title_licenses"
         android:textSize="16sp"
+        android:background="@drawable/ripple"
         />
 
     <include layout="@layout/primary_dark_divider" />
@@ -147,7 +147,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
-        android:background="@color/soft_background"
+        android:background="@drawable/ripple"
         >
         <TextView
             android:layout_width="wrap_content"
