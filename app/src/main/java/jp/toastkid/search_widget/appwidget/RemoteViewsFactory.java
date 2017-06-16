@@ -1,15 +1,12 @@
 package jp.toastkid.search_widget.appwidget;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.libs.PendingIntentFactory;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
-import jp.toastkid.search_widget.search.SearchActivity;
-import jp.toastkid.search_widget.settings.SettingsActivity;
 
 /**
  * App Widget's RemoteViews factory.
@@ -27,35 +24,25 @@ class RemoteViewsFactory {
     static RemoteViews make(final Context context) {
         final RemoteViews remoteViews
                 = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        remoteViews.setOnClickPendingIntent(R.id.widget_search, makeSearchIntent(context));
-        remoteViews.setOnClickPendingIntent(R.id.widget_settings, makeSettingsIntent(context));
+        remoteViews.setOnClickPendingIntent(
+                R.id.widget_search, PendingIntentFactory.makeSearchIntent(context));
+        remoteViews.setOnClickPendingIntent(
+                R.id.widget_settings, PendingIntentFactory.makeSettingsIntent(context));
 
         final PreferenceApplier preferenceApplier = new PreferenceApplier(context);
-        remoteViews.setInt(R.id.widget_background, "setBackgroundColor", preferenceApplier.getColor());
-        remoteViews.setInt(R.id.widget_search_border, "setBackgroundColor", preferenceApplier.getFontColor());
-        remoteViews.setInt(R.id.widget_search_image, "setColorFilter", preferenceApplier.getFontColor());
-        remoteViews.setInt(R.id.widget_settings, "setColorFilter", preferenceApplier.getFontColor());
-        remoteViews.setTextColor(R.id.widget_search_text, preferenceApplier.getFontColor());
+
+        remoteViews.setInt(
+                R.id.widget_background, "setBackgroundColor", preferenceApplier.getColor());
+        remoteViews.setInt(
+                R.id.widget_search_border, "setBackgroundColor", preferenceApplier.getFontColor());
+        remoteViews.setInt(
+                R.id.widget_search_image, "setColorFilter", preferenceApplier.getFontColor());
+        remoteViews.setInt(
+                R.id.widget_settings, "setColorFilter", preferenceApplier.getFontColor());
+        remoteViews.setTextColor(
+                R.id.widget_search_text, preferenceApplier.getFontColor());
+
         return remoteViews;
     }
 
-    /**
-     * Make launch search intent.
-     * @param context
-     * @return
-     */
-    static PendingIntent makeSearchIntent(final Context context) {
-        final Intent intent = SearchActivity.makeIntent(context);
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    /**
-     * Make launch settings intent.
-     * @param context
-     * @return
-     */
-    static PendingIntent makeSettingsIntent(final Context context) {
-        final Intent intent = SettingsActivity.makeIntent(context);
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
 }

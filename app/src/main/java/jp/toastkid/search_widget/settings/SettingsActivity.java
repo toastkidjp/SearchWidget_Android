@@ -117,7 +117,7 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     protected int getTitleId() {
-        return R.string.action_settings;
+        return R.string.title_settings;
     }
 
     /**

@@ -31,7 +31,7 @@
                     android:layout_height="match_parent"
                     android:maxLines="1"
                     android:gravity="center_vertical"
-                    android:hint="@string/search_text"
+                    android:hint="@string/title_search"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
                     app:theme="@style/EditTextStyle"

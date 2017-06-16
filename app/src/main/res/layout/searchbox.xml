@@ -26,7 +26,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="40dp"
             android:gravity="center_vertical"
-            android:text="@string/search_text"
+            android:text="@string/title_search"
             android:textColor="@color/white"
             android:textSize="16sp"
             />

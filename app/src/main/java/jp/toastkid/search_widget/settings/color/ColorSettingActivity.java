@@ -215,7 +215,7 @@ public class ColorSettingActivity extends BaseActivity {
 
     @Override
     protected int getTitleId() {
-        return R.string.settings_color_text;
+        return R.string.title_settings_color;
     }
 
     /**

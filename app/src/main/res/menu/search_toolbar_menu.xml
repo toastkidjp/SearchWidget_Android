@@ -6,7 +6,7 @@
     tools:context=".settings.SettingsActivity">
     <item
         android:id="@+id/search_toolbar_menu_setting"
-        android:title="@string/action_settings"
+        android:title="@string/title_settings"
         android:orderInCategory="90"
         app:showAsAction="never"
         />
