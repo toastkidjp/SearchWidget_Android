@@ -41,6 +41,7 @@ import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 import jp.toastkid.search_widget.search.suggest.SuggestAdapter;
 import jp.toastkid.search_widget.search.suggest.SuggestFetcher;
 import jp.toastkid.search_widget.settings.SettingsActivity;
+import jp.toastkid.search_widget.settings.color.ColorSettingActivity;
 
 /**
  * Search activity.
@@ -199,9 +200,15 @@ public class SearchActivity extends BaseActivity {
         final int itemId = item.getItemId();
         if (itemId == R.id.search_toolbar_menu_setting) {
             startActivity(SettingsActivity.makeIntent(this));
+            return true;
+        }
+        if (itemId == R.id.search_toolbar_menu_color) {
+            startActivity(ColorSettingActivity.makeIntent(this));
+            return true;
         }
         if (itemId == R.id.search_toolbar_menu_favorite) {
             startActivity(FavoriteSearchActivity.makeIntent(this));
+            return true;
         }
         return super.clickMenu(item);
     }
