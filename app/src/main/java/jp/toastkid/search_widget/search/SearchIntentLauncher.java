@@ -78,7 +78,7 @@ class SearchIntentLauncher {
                 )
                 .addMenuItem(
                         "お気に入り検索に追加",
-                        PendingIntentFactory.makeFavoriteSearchPendingIndent(context, category, query)
+                        PendingIntentFactory.makeFavoriteSearchAddingPendingIndent(context, category, query)
                 )
                 .build();
         intent.launchUrl(context, new UrlFactory().make(category, query));
