@@ -17,12 +17,15 @@ class FavoriteSearchHolder extends RecyclerView.ViewHolder {
 
     final ImageView imageView;
 
-    final TextView  textView;
+    private final TextView textView;
+
+    final View removeView;
 
     FavoriteSearchHolder(final View itemView) {
         super(itemView);
-        imageView = (ImageView) itemView.findViewById(R.id.favorite_search_image);
-        textView  = (TextView) itemView.findViewById(R.id.favorite_search_text);
+        imageView  = (ImageView) itemView.findViewById(R.id.favorite_search_image);
+        textView   = (TextView) itemView.findViewById(R.id.favorite_search_text);
+        removeView = itemView.findViewById(R.id.favorite_search_delete);
     }
 
     void setImageId(@DrawableRes final int iconId) {

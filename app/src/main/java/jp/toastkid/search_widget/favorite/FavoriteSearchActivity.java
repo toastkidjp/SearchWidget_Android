@@ -96,12 +96,11 @@ public class FavoriteSearchActivity extends BaseActivity {
 
         holder.itemView.setOnClickListener(v -> startSearch(category, query));
 
-        holder.itemView.setOnLongClickListener(v -> {
+        holder.removeView.setOnClickListener(v -> {
             final int index = savedSearchs.indexOf(favoriteSearch);
             Realm.getDefaultInstance().executeTransaction(realm -> favoriteSearch.deleteFromRealm());
             adapter.notifyItemRemoved(index);
             Toaster.snackShort(holder.imageView, R.string.settings_color_delete, preferenceApplier.getColor());
-            return true;
         });
     }
 

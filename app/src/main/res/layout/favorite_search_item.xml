@@ -5,28 +5,38 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ripple_soft"
     >
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         >
         <ImageView
             android:id="@+id/favorite_search_image"
             android:layout_width="40dp"
             android:layout_height="match_parent"
+            android:layout_gravity="left|center_vertical"
             android:adjustViewBounds="true"
             />
         <TextView
             android:id="@+id/favorite_search_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="50dp"
             android:gravity="center_vertical"
             android:textSize="22sp"
             />
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/favorite_search_delete"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_remove_circle"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ripple_transparent"
+            />
+    </FrameLayout>
     <include layout="@layout/primary_dark_divider"/>
 </LinearLayout>
