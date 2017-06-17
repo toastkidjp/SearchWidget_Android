@@ -1,31 +1,21 @@
 package jp.toastkid.search_widget.favorite;
 
-import android.support.annotation.NonNull;
-
-import io.realm.RealmObject;
+import com.github.gfx.android.orma.annotation.Column;
+import com.github.gfx.android.orma.annotation.PrimaryKey;
+import com.github.gfx.android.orma.annotation.Table;
 
 /**
  * @author toastkidjp
  */
-public class FavoriteSearch extends RealmObject {
+@Table
+public class FavoriteSearch {
 
-    private String category;
+    @PrimaryKey(autoincrement = true)
+    public long id;
 
-    private String query;
+    @Column
+    public String category;
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(@NonNull final String category) {
-        this.category = category;
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(@NonNull final String query) {
-        this.query = query;
-    }
+    @Column
+    public String query;
 }

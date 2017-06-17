@@ -3,7 +3,8 @@ package jp.toastkid.search_widget.favorite;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import io.realm.Realm;
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author toastkidjp
@@ -31,17 +32,16 @@ class Insertion {
     }
 
     private void insertFavoriteSearch(final FavoriteSearch favoriteSearch) {
-        Realm.init(context);
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        realm.copyToRealm(favoriteSearch);
-        realm.commitTransaction();
+        Completable.create(e -> {
+            DbInitter.get(context).insertIntoFavoriteSearch(favoriteSearch);
+            e.onComplete();
+        }).subscribeOn(Schedulers.io()).subscribe();
     }
 
     private FavoriteSearch makeFavoriteSearch(final String category, final String query) {
         final FavoriteSearch fs = new FavoriteSearch();
-        fs.setCategory(category);
-        fs.setQuery(query);
+        fs.category = category;
+        fs.query    = query;
         return fs;
     }
 

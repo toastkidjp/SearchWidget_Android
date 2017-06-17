@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
     byte verMajor  = 1;
-    byte verMiddle = 0;
-    byte verMinor  = 2;
+    byte verMiddle = 1;
+    byte verMinor  = 0;
 
     defaultConfig {
         applicationId "jp.toastkid.search_widget"
@@ -55,7 +54,9 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.github.gfx.android.orma:orma:4.2.5'
 
+    annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
     def leakcanaryVersion = '1.5.1'

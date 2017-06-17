@@ -3,6 +3,7 @@ package jp.toastkid.search_widget.settings.color;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.github.gfx.android.orma.Relation;
+import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
@@ -18,8 +21,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.Realm;
-import io.realm.RealmResults;
+import io.reactivex.schedulers.Schedulers;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.appwidget.Updater;
@@ -69,9 +71,7 @@ public class ColorSettingActivity extends BaseActivity {
 
     private PreferenceApplier mPreferenceApplier;
 
-    private RealmResults<SavedColor> savedColors;
-
-    private RecyclerView.Adapter<SavedColorHolder> adapter;
+    private OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder> adapter;
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -118,37 +118,10 @@ public class ColorSettingActivity extends BaseActivity {
 
     private void initSavedColors() {
 
-        adapter = new RecyclerView.Adapter<SavedColorHolder>() {
-            @Override
-            public SavedColorHolder onCreateViewHolder(
-                    final ViewGroup parent,
-                    final int viewType
-            ) {
-                final LayoutInflater inflater = LayoutInflater.from(ColorSettingActivity.this);
-                return new SavedColorHolder(inflater.inflate(R.layout.saved_color, parent, false));
-            }
-
-            @Override
-            public void onBindViewHolder(final SavedColorHolder holder, final int position) {
-                bindView(holder, savedColors.get(position));
-            }
-
-            @Override
-            public int getItemCount() {
-                return savedColors.size();
-            }
-        };
+        adapter = new SavedColorAdapter(this, DbInitter.get(this).relationOfSavedColor());
         savedColorsView.setAdapter(adapter);
         savedColorsView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        Realm.init(this);
-        savedColors = Realm.getDefaultInstance().where(SavedColor.class).findAll();
-        if (savedColors.size() == 0) {
-            return;
-        }
-        savedColors.addChangeListener(r -> adapter.notifyDataSetChanged());
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -158,11 +131,11 @@ public class ColorSettingActivity extends BaseActivity {
      */
     private void bindView(final SavedColorHolder holder, final SavedColor color) {
         Colors.setSaved(holder.textView, color);
-        holder.textView.setOnClickListener(v -> commitNewColor(color.getBgColor(), color.getFontColor()));
+        holder.textView.setOnClickListener(v -> commitNewColor(color.bgColor, color.fontColor));
         holder.remove.setOnClickListener(v -> {
-            final int index = savedColors.indexOf(color);
-            Realm.getDefaultInstance().executeTransaction(realm -> color.deleteFromRealm());
-            adapter.notifyItemRemoved(index);
+            adapter.removeItemAsMaybe(color)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe();
             Toaster.snackShort(toolbar, R.string.settings_color_delete, mPreferenceApplier.getColor());
         });
     }
@@ -192,8 +165,10 @@ public class ColorSettingActivity extends BaseActivity {
         bundle.putString("font", Integer.toHexString(fontColor));
         sendLog("color_set", bundle);
 
-        Colors.insertColor(Realm.getDefaultInstance(), bgColor, fontColor);
-        adapter.notifyItemInserted(savedColors.size());
+        final SavedColor savedColor = new SavedColor();
+        savedColor.bgColor   = bgColor;
+        savedColor.fontColor = fontColor;
+        adapter.addItemAsSingle(savedColor).subscribeOn(Schedulers.io()).subscribe();
     }
 
     private void commitNewColor(final int bgColor, final int fontColor) {
@@ -214,7 +189,7 @@ public class ColorSettingActivity extends BaseActivity {
 
     @OnClick(R.id.clear_saved_color)
     public void clearSavedColor() {
-        Colors.showClearColorsDialog(this, toolbar);
+        Colors.showClearColorsDialog(this, toolbar, (SavedColor_Relation) adapter.getRelation());
     }
 
     @Override
@@ -232,5 +207,31 @@ public class ColorSettingActivity extends BaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         return intent;
     }
+
+    private class SavedColorAdapter extends OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder> {
+
+        public SavedColorAdapter(@NonNull Context context, @NonNull Relation<SavedColor, ?> relation) {
+            super(context, relation);
+        }
+
+        @Override
+        public SavedColorHolder onCreateViewHolder(
+                final ViewGroup parent,
+                final int viewType
+            ) {
+            final LayoutInflater inflater = LayoutInflater.from(ColorSettingActivity.this);
+            return new SavedColorHolder(inflater.inflate(R.layout.saved_color, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(final SavedColorHolder holder, final int position) {
+            bindView(holder, getRelation().get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return getRelation().count();
+        }
+    };
 
 }

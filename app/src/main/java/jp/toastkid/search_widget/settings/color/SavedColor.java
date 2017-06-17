@@ -1,29 +1,22 @@
 package jp.toastkid.search_widget.settings.color;
 
-import io.realm.RealmObject;
+import com.github.gfx.android.orma.annotation.Column;
+import com.github.gfx.android.orma.annotation.PrimaryKey;
+import com.github.gfx.android.orma.annotation.Table;
 
 /**
  * @author toastkidjp
  */
-public class SavedColor extends RealmObject {
+@Table
+public class SavedColor {
 
-    private int bgColor;
+    @PrimaryKey(autoincrement = true)
+    public long id;
 
-    private int fontColor;
+    @Column
+    public  int bgColor;
 
-    public int getBgColor() {
-        return bgColor;
-    }
+    @Column
+    public  int fontColor;
 
-    public void setBgColor(int bgColor) {
-        this.bgColor = bgColor;
-    }
-
-    public int getFontColor() {
-        return fontColor;
-    }
-
-    public void setFontColor(int fontColor) {
-        this.fontColor = fontColor;
-    }
 }
