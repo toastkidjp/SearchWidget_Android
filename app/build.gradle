@@ -14,6 +14,9 @@ android {
         applicationId "jp.toastkid.search_widget"
         minSdkVersion 16
         targetSdkVersion 25
+        if (verMiddle >= 100 || verMinor >= 100) {
+            throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
+        }
         versionCode ((verMajor * 10000) + (verMiddle * 100) + verMinor)
         versionName verMajor + "." + verMiddle + "." + verMinor
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
