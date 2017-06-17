@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkgray_scale"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/favorite_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:minHeight="?android:actionBarSize"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/favorite_search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <include layout="@layout/primary_dark_divider"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/favorite_search_addition"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_item_height"
+                android:paddingLeft="@dimen/settings_item_left_margin"
+                android:background="@drawable/ripple_soft"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/favorite_add_title"
+                    android:textSize="16sp"
+                    android:drawableLeft="@drawable/ic_favorite"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

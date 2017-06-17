@@ -1,15 +1,13 @@
 package jp.toastkid.search_widget.appwidget;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.libs.PendingIntentFactory;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
-import jp.toastkid.search_widget.search.SearchActivity;
-import jp.toastkid.search_widget.settings.SettingsActivity;
 
 /**
  * App Widget's RemoteViews factory.
@@ -18,8 +16,15 @@ import jp.toastkid.search_widget.settings.SettingsActivity;
  */
 class RemoteViewsFactory {
 
+    /** Method name. */
+    private static final String METHOD_NAME_SET_COLOR_FILTER     = "setColorFilter";
+
+    /** Method name. */
+    private static final String METHOD_NAME_SET_BACKGROUND_COLOR = "setBackgroundColor";
+
     /**
      * Make RemoteViews.
+     *
      * @param context
      * @return RemoteViews
      */
@@ -27,35 +32,59 @@ class RemoteViewsFactory {
     static RemoteViews make(final Context context) {
         final RemoteViews remoteViews
                 = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        remoteViews.setOnClickPendingIntent(R.id.widget_search, makeSearchIntent(context));
-        remoteViews.setOnClickPendingIntent(R.id.widget_settings, makeSettingsIntent(context));
+        setTapActions(context, remoteViews);
 
         final PreferenceApplier preferenceApplier = new PreferenceApplier(context);
-        remoteViews.setInt(R.id.widget_background, "setBackgroundColor", preferenceApplier.getColor());
-        remoteViews.setInt(R.id.widget_search_border, "setBackgroundColor", preferenceApplier.getFontColor());
-        remoteViews.setInt(R.id.widget_search_image, "setColorFilter", preferenceApplier.getFontColor());
-        remoteViews.setInt(R.id.widget_settings, "setColorFilter", preferenceApplier.getFontColor());
-        remoteViews.setTextColor(R.id.widget_search_text, preferenceApplier.getFontColor());
+
+        setBackgroundColor(remoteViews, preferenceApplier.getColor());
+
+        setFontColor(remoteViews, preferenceApplier.getFontColor());
+
         return remoteViews;
     }
 
     /**
-     * Make launch search intent.
-     * @param context
-     * @return
+     * Set background color to remote views.
+     * @param remoteViews
+     * @param backgroundColor
      */
-    static PendingIntent makeSearchIntent(final Context context) {
-        final Intent intent = SearchActivity.makeIntent(context);
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private static void setBackgroundColor(
+            final RemoteViews remoteViews,
+            @ColorInt final int backgroundColor
+    ) {
+        remoteViews.setInt(
+                R.id.widget_background, METHOD_NAME_SET_BACKGROUND_COLOR, backgroundColor);
     }
 
     /**
-     * Make launch settings intent.
-     * @param context
-     * @return
+     * Set font color to remote views.
+     * @param remoteViews
+     * @param fontColor
      */
-    static PendingIntent makeSettingsIntent(final Context context) {
-        final Intent intent = SettingsActivity.makeIntent(context);
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private static void setFontColor(
+            final RemoteViews remoteViews,
+            @ColorInt final int fontColor
+    ) {
+        remoteViews.setInt(R.id.widget_search_border, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor);
+        remoteViews.setInt(R.id.widget_search_image,  METHOD_NAME_SET_COLOR_FILTER,     fontColor);
+        remoteViews.setInt(R.id.widget_favorite,      METHOD_NAME_SET_COLOR_FILTER,     fontColor);
+        remoteViews.setInt(R.id.widget_settings,      METHOD_NAME_SET_COLOR_FILTER,     fontColor);
+
+        remoteViews.setTextColor(R.id.widget_search_text, fontColor);
     }
+
+    /**
+     * Set pending intents.
+     * @param context
+     * @param remoteViews
+     */
+    private static void setTapActions(final Context context, final RemoteViews remoteViews) {
+        remoteViews.setOnClickPendingIntent(
+                R.id.widget_search,   PendingIntentFactory.makeSearchIntent(context));
+        remoteViews.setOnClickPendingIntent(
+                R.id.widget_settings, PendingIntentFactory.makeSettingsIntent(context));
+        remoteViews.setOnClickPendingIntent(
+                R.id.widget_favorite, PendingIntentFactory.makeFavoriteSearchPendingIndent(context));
+    }
+
 }

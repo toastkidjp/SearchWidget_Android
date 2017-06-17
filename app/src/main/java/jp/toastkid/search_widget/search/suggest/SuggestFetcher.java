@@ -1,7 +1,7 @@
 package jp.toastkid.search_widget.search.suggest;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,8 +9,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
-import jp.toastkid.search_widget.libs.Logger;
-import jp.toastkid.search_widget.libs.Utf8StringEncoder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -82,6 +80,6 @@ public class SuggestFetcher {
     @NonNull
     private String makeSuggestUrl(@NonNull final String query) {
         return URL + "&hl=" + Locale.getDefault().getLanguage()
-                + "&q=" + Utf8StringEncoder.encode(query);
+                + "&q=" + Uri.encode(query);
     }
 }

@@ -3,39 +3,26 @@ package jp.toastkid.search_widget.search;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.graphics.ColorUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.TintContextWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +34,14 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
-import jp.toastkid.search_widget.libs.Logger;
+import jp.toastkid.search_widget.favorite.FavoriteSearchActivity;
+import jp.toastkid.search_widget.favorite.AddingFavoriteSearchService;
 import jp.toastkid.search_widget.libs.network.NetworkChecker;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
+import jp.toastkid.search_widget.search.suggest.SuggestAdapter;
 import jp.toastkid.search_widget.search.suggest.SuggestFetcher;
 import jp.toastkid.search_widget.settings.SettingsActivity;
+import jp.toastkid.search_widget.settings.color.ColorSettingActivity;
 
 /**
  * Search activity.
@@ -60,7 +50,8 @@ import jp.toastkid.search_widget.settings.SettingsActivity;
  */
 public class SearchActivity extends BaseActivity {
 
-
+    /** Key of extra. */
+    private static final String EXTRA_KEY_FINISH_SOON = "finish_soon";
 
     /** Background filter. */
     @BindView(R.id.search_background_filter)
@@ -77,6 +68,10 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.search_categories)
     public Spinner mSearchCategories;
 
+    /** Do on click action's background. */
+    @BindView(R.id.search_action_background)
+    public View mSearchActionBackground;
+
     /** Do on click action. */
     @BindView(R.id.search_action)
     public TextView mSearchAction;
@@ -88,6 +83,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.search_suggests)
     public ListView mSearchSuggests;
 
+    /** Preference applier. */
     private PreferenceApplier mPreferenceApplier;
 
     /** Search result URL factory. */
@@ -115,26 +111,29 @@ public class SearchActivity extends BaseActivity {
 
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(SearchManager.QUERY)) {
-            search("WEB", intent.getStringExtra(SearchManager.QUERY));
+            final String category = intent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
+                    ? intent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
+                    : SearchCategory.WEB.name();
+            search(category, intent.getStringExtra(SearchManager.QUERY));
+            if (intent.getBooleanExtra(EXTRA_KEY_FINISH_SOON, false)) {
+                finish();
+            }
         }
 
-        mSearchAction.setOnClickListener(v -> search(
-                mSearchCategories.getSelectedItem().toString(),
-                mSearchInput.getText().toString()
-                )
-        );
-
         mSearchClear.setOnClickListener(v -> mSearchInput.setText(""));
-
     }
 
     private void initUrlFactory() {
-        mUrlFactory = new UrlFactory(this);
-        mUrlFactory.initSpinner(mSearchCategories);
+        mUrlFactory = new UrlFactory();
+        SearchCategorySpinnerInitializer.initialize(mSearchCategories);
     }
 
     private void initSuggests() {
-        mSuggestAdapter = new SuggestAdapter(LayoutInflater.from(this));
+        mSuggestAdapter = new SuggestAdapter(
+                LayoutInflater.from(this),
+                mSearchInput,
+                suggest -> search(mSearchCategories.getSelectedItem().toString(), suggest)
+                );
         mSearchSuggests.setAdapter(mSuggestAdapter);
     }
 
@@ -168,7 +167,6 @@ public class SearchActivity extends BaseActivity {
 
                 final String key = s.toString();
                 if (mCache.containsKey(key)) {
-                    Logger.i("suggest: use cache " + s);
                     replaceSuggests(mCache.get(key));
                     return;
                 }
@@ -185,7 +183,6 @@ public class SearchActivity extends BaseActivity {
                         }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
                         return;
                     }
-                    Logger.i("suggest: fetch " + s + " " + suggests);
                     replaceSuggests(suggests);
                     mCache.put(key, suggests);
                 });
@@ -203,6 +200,15 @@ public class SearchActivity extends BaseActivity {
         final int itemId = item.getItemId();
         if (itemId == R.id.search_toolbar_menu_setting) {
             startActivity(SettingsActivity.makeIntent(this));
+            return true;
+        }
+        if (itemId == R.id.search_toolbar_menu_color) {
+            startActivity(ColorSettingActivity.makeIntent(this));
+            return true;
+        }
+        if (itemId == R.id.search_toolbar_menu_favorite) {
+            startActivity(FavoriteSearchActivity.makeIntent(this));
+            return true;
         }
         return super.clickMenu(item);
     }
@@ -242,7 +248,7 @@ public class SearchActivity extends BaseActivity {
             getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(bgColor, 255));
         }
 
-        mSearchAction.setBackgroundColor(
+        mSearchActionBackground.setBackgroundColor(
                 ColorUtils.setAlphaComponent(mPreferenceApplier.getColor(), 128));
         mSearchAction.setTextColor(mPreferenceApplier.getFontColor());
         mSearchClear.setColorFilter(mPreferenceApplier.getFontColor());
@@ -261,21 +267,19 @@ public class SearchActivity extends BaseActivity {
      * @param category search category
      * @param query    search query
      */
-    public void search(final String category, final String query) {
+    private void search(final String category, final String query) {
 
         final Bundle bundle = new Bundle();
         bundle.putString("category", category);
         bundle.putString("query", query);
         sendLog("search", bundle);
 
-        final CustomTabsIntent intent = new CustomTabsIntent.Builder()
-                .setToolbarColor(mPreferenceApplier.getColor())
-                .setCloseButtonIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_back))
-                .setSecondaryToolbarColor(mPreferenceApplier.getFontColor())
-                .setStartAnimations(this, android.R.anim.fade_in, android.R.anim.fade_out)
-                .setExitAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .build();
-        intent.launchUrl(this, mUrlFactory.make(category, query));
+        new SearchIntentLauncher(this)
+                .setBackgroundColor(mPreferenceApplier.getColor())
+                .setFontColor(mPreferenceApplier.getFontColor())
+                .setCategory(category)
+                .setQuery(query)
+                .invoke();
     }
 
     @Override
@@ -283,59 +287,9 @@ public class SearchActivity extends BaseActivity {
         return R.string.search_action_title;
     }
 
-    private class SuggestAdapter extends BaseAdapter {
-
-         private final LayoutInflater mInflater;
-
-         private final List<String> mSuggests;
-
-         SuggestAdapter(final LayoutInflater inflater) {
-             mInflater = inflater;
-             mSuggests = new ArrayList<>();
-         }
-
-         void clear() {
-             mSuggests.clear();
-             notifyDataSetChanged();
-         }
-
-         void replace(final List<String> strs) {
-             mSuggests.clear();
-             mSuggests.addAll(strs);
-         }
-
-         @Override
-         public int getCount() {
-             return mSuggests.size();
-         }
-
-         @Override
-         public Object getItem(int position) {
-             return mSuggests.get(position);
-         }
-
-         @Override
-         public long getItemId(int position) {
-             return mSuggests.get(position).hashCode();
-         }
-
-         @Override
-         public View getView(int position, View convertView, ViewGroup parent) {
-             final View inflate = mInflater.inflate(R.layout.search_suggest, null);
-             final TextView textView = (TextView) inflate.findViewById(R.id.search_suggest_text);
-             final String suggest = mSuggests.get(position);
-             textView.setText(suggest);
-             inflate.findViewById(R.id.search_suggest_add).setOnClickListener(v -> {
-                 mSearchInput.setText(suggest + " ");
-                 mSearchInput.setSelection(mSearchInput.getText().toString().length());
-             });
-             inflate.setOnClickListener(
-                     v -> {
-                         mSearchInput.setText(suggest);
-                         search(mSearchCategories.getSelectedItem().toString(), suggest);
-                     });
-             return inflate;
-         }
+    @OnClick(R.id.search_action)
+    public void clickSearch() {
+        search(mSearchCategories.getSelectedItem().toString(), mSearchInput.getText().toString());
     }
 
     /**
@@ -343,9 +297,43 @@ public class SearchActivity extends BaseActivity {
      * @param context
      * @return launcher intent
      */
-    public static Intent makeIntent(final Context context) {
+    public static Intent makeIntent(@NonNull final Context context) {
         final Intent intent = new Intent(context, SearchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        return intent;
+    }
+
+    /**
+     * Make launcher intent.
+     * @param context
+     * @return launcher intent
+     */
+    public static Intent makeShortcutIntent(
+            @NonNull final Context context,
+            @NonNull final SearchCategory category,
+            @NonNull final String query
+    ) {
+        return makeShortcutIntent(context, category, query, false);
+    }
+
+    /**
+     * Make launcher intent.
+     * @param context
+     * @param category
+     * @param query
+     * @param finishSoon
+     * @return launcher intent
+     */
+    public static Intent makeShortcutIntent(
+            @NonNull final Context context,
+            @NonNull final SearchCategory category,
+            @NonNull final String query,
+            final boolean finishSoon
+    ) {
+        final Intent intent = makeIntent(context);
+        intent.putExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY, category.name());
+        intent.putExtra(SearchManager.QUERY,   query);
+        intent.putExtra(EXTRA_KEY_FINISH_SOON, finishSoon);
         return intent;
     }
 }
