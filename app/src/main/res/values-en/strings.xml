@@ -47,7 +47,7 @@
     <string name="favorite_clear_all_title">Clear</string>
     <string name="title_favorite_search">Favorite search word</string>
     <string name="favorite_add_title">Add</string>
-    <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
-    <string name="favorite_search_addition_successful_format">{0} をお気に入りに追加しました。</string>
+    <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
+    <string name="favorite_search_addition_successful_format">It has been insert "{0}" to "Favorite search word".</string>
 
 </resources>
