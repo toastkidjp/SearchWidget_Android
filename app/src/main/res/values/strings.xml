@@ -44,5 +44,7 @@
     <string name="settings_color_saved_title">保存した色</string>
     <string name="settings_color_saved_text">長押しすると削除できます。</string>
     <string name="title_clear_saved_color">すべて削除</string>
+    <string name="favorite_clear_all_title">すべて削除</string>
+    <string name="title_favorite_search">お気に入り検索</string>
 
 </resources>

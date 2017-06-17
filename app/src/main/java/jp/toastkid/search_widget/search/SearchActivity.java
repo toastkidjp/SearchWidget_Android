@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.AppCompatEditText;
@@ -33,7 +34,8 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
-import jp.toastkid.search_widget.libs.Logger;
+import jp.toastkid.search_widget.favorite.FavoriteSearchActivity;
+import jp.toastkid.search_widget.favorite.FavoriteSearchService;
 import jp.toastkid.search_widget.libs.network.NetworkChecker;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 import jp.toastkid.search_widget.search.suggest.SuggestAdapter;
@@ -46,6 +48,9 @@ import jp.toastkid.search_widget.settings.SettingsActivity;
  * @author toastkidjp
  */
 public class SearchActivity extends BaseActivity {
+
+    /** Key of extra. */
+    private static final String EXTRA_KEY_FINISH_SOON = "finish_soon";
 
     /** Background filter. */
     @BindView(R.id.search_background_filter)
@@ -105,7 +110,13 @@ public class SearchActivity extends BaseActivity {
 
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(SearchManager.QUERY)) {
-            search("WEB", intent.getStringExtra(SearchManager.QUERY));
+            final String category = intent.hasExtra(FavoriteSearchService.EXTRA_KEY_CATEGORY)
+                    ? intent.getStringExtra(FavoriteSearchService.EXTRA_KEY_CATEGORY)
+                    : SearchCategory.WEB.name();
+            search(category, intent.getStringExtra(SearchManager.QUERY));
+            if (intent.getBooleanExtra(EXTRA_KEY_FINISH_SOON, false)) {
+                finish();
+            }
         }
 
         mSearchClear.setOnClickListener(v -> mSearchInput.setText(""));
@@ -189,6 +200,9 @@ public class SearchActivity extends BaseActivity {
         if (itemId == R.id.search_toolbar_menu_setting) {
             startActivity(SettingsActivity.makeIntent(this));
         }
+        if (itemId == R.id.search_toolbar_menu_favorite) {
+            startActivity(FavoriteSearchActivity.makeIntent(this));
+        }
         return super.clickMenu(item);
     }
 
@@ -246,7 +260,7 @@ public class SearchActivity extends BaseActivity {
      * @param category search category
      * @param query    search query
      */
-    public void search(final String category, final String query) {
+    private void search(final String category, final String query) {
 
         final Bundle bundle = new Bundle();
         bundle.putString("category", category);
@@ -256,7 +270,8 @@ public class SearchActivity extends BaseActivity {
         new SearchIntentLauncher(this)
                 .setBackgroundColor(mPreferenceApplier.getColor())
                 .setFontColor(mPreferenceApplier.getFontColor())
-                .setUri(mUrlFactory.make(category, query))
+                .setCategory(category)
+                .setQuery(query)
                 .invoke();
     }
 
@@ -275,10 +290,43 @@ public class SearchActivity extends BaseActivity {
      * @param context
      * @return launcher intent
      */
-    public static Intent makeIntent(final Context context) {
+    public static Intent makeIntent(@NonNull final Context context) {
         final Intent intent = new Intent(context, SearchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
 
+    /**
+     * Make launcher intent.
+     * @param context
+     * @return launcher intent
+     */
+    public static Intent makeShortcutIntent(
+            @NonNull final Context context,
+            @NonNull final SearchCategory category,
+            @NonNull final String query
+    ) {
+        return makeShortcutIntent(context, category, query, false);
+    }
+
+    /**
+     * Make launcher intent.
+     * @param context
+     * @param category
+     * @param query
+     * @param finishSoon
+     * @return launcher intent
+     */
+    public static Intent makeShortcutIntent(
+            @NonNull final Context context,
+            @NonNull final SearchCategory category,
+            @NonNull final String query,
+            final boolean finishSoon
+    ) {
+        final Intent intent = makeIntent(context);
+        intent.putExtra(FavoriteSearchService.EXTRA_KEY_CATEGORY, category.name());
+        intent.putExtra(SearchManager.QUERY,   query);
+        intent.putExtra(EXTRA_KEY_FINISH_SOON, finishSoon);
+        return intent;
+    }
 }

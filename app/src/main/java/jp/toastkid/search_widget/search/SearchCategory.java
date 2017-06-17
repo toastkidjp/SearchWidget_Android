@@ -11,7 +11,7 @@ import jp.toastkid.search_widget.R;
  *
  * @author toastkidjp
  */
-enum SearchCategory {
+public enum SearchCategory {
 
     WEB(R.string.search_category_web,
             R.drawable.ic_world,

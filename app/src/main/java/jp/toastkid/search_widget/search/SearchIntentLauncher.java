@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -26,7 +25,10 @@ class SearchIntentLauncher {
 
     private @ColorInt int fontColor;
 
-    private @NonNull Uri uri;
+    private @NonNull String category;
+
+    private @NonNull String query;
+
     private Resources resources;
 
     SearchIntentLauncher(@NonNull final Context context) {
@@ -44,8 +46,13 @@ class SearchIntentLauncher {
         return this;
     }
 
-    SearchIntentLauncher setUri(@NonNull final Uri uri) {
-        this.uri = uri;
+    SearchIntentLauncher setCategory(@NonNull final String category) {
+        this.category = category;
+        return this;
+    }
+
+    SearchIntentLauncher setQuery(@NonNull final String query) {
+        this.query = query;
         return this;
     }
 
@@ -69,8 +76,12 @@ class SearchIntentLauncher {
                         context.getString(R.string.title_settings_color),
                         PendingIntentFactory.makeColorSettingsIntent(context)
                 )
+                .addMenuItem(
+                        "お気に入り検索に追加",
+                        PendingIntentFactory.makeFavoriteSearchPendingIndent(context, category, query)
+                )
                 .build();
-        intent.launchUrl(context, uri);
+        intent.launchUrl(context, new UrlFactory(context).make(category, query));
     }
 
     private Bitmap decodeResource(@DrawableRes final int id) {

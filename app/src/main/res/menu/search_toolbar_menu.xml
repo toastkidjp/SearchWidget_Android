@@ -10,4 +10,10 @@
         android:orderInCategory="90"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/search_toolbar_menu_favorite"
+        android:title="@string/title_favorite_search"
+        android:orderInCategory="91"
+        app:showAsAction="never"
+        />
 </menu>

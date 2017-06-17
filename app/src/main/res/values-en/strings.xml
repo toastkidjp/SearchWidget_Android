@@ -44,5 +44,7 @@
     <string name="settings_color_saved_title">Saved colors</string>
     <string name="settings_color_saved_text">If you long tap item, it will be deleted.</string>
     <string name="title_clear_saved_color">Clear saved color</string>
+    <string name="favorite_clear_all_title">すべて削除</string>
+    <string name="title_favorite_search">お気に入り検索</string>
 
 </resources>
