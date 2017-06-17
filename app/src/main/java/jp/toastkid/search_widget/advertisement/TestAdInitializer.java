@@ -1,7 +1,6 @@
 package jp.toastkid.search_widget.advertisement;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.ads.AdRequest;

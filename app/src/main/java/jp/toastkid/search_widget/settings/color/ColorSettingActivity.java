@@ -130,7 +130,7 @@ public class ColorSettingActivity extends BaseActivity {
 
             @Override
             public void onBindViewHolder(final SavedColorHolder holder, final int position) {
-                makeSavedColorView(holder.textView, savedColors.get(position));
+                bindView(holder, savedColors.get(position));
             }
 
             @Override
@@ -151,15 +151,19 @@ public class ColorSettingActivity extends BaseActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void makeSavedColorView(final Button button, final SavedColor color) {
-        Colors.setSaved(button, color);
-        button.setOnClickListener(v -> commitNewColor(color.getBgColor(), color.getFontColor()));
-        button.setOnLongClickListener(v -> {
+    /**
+     * Bind value and action to holder's view.
+     * @param holder Holder
+     * @param color  {@link SavedColor} object
+     */
+    private void bindView(final SavedColorHolder holder, final SavedColor color) {
+        Colors.setSaved(holder.textView, color);
+        holder.textView.setOnClickListener(v -> commitNewColor(color.getBgColor(), color.getFontColor()));
+        holder.remove.setOnClickListener(v -> {
             final int index = savedColors.indexOf(color);
             Realm.getDefaultInstance().executeTransaction(realm -> color.deleteFromRealm());
             adapter.notifyItemRemoved(index);
-            Toaster.snackShort(button, R.string.settings_color_delete, mPreferenceApplier.getColor());
-            return true;
+            Toaster.snackShort(toolbar, R.string.settings_color_delete, mPreferenceApplier.getColor());
         });
     }
 
@@ -215,7 +219,7 @@ public class ColorSettingActivity extends BaseActivity {
 
     @Override
     protected int getTitleId() {
-        return R.string.settings_color_text;
+        return R.string.title_settings_color;
     }
 
     /**

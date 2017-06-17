@@ -60,7 +60,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void sendLog(final String key, final Bundle bundle) {
-        bundle.putBoolean("is_debug", BuildConfig.DEBUG);
+        if (BuildConfig.DEBUG) {
+            return;
+        }
         sender.logEvent(key, bundle);
     }
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/settings_item_left_margin"
+    android:layout_marginRight="@dimen/settings_item_left_margin"
+    android:background="@color/soft_background"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:textSize="16sp"
+        />
+    <Spinner
+        android:id="@+id/favorite_search_addition_categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:spinnerMode="dropdown"
+        android:background="@color/spinner_background"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Word"
+        android:textSize="16sp"
+        />
+    <EditText
+        android:id="@+id/favorite_search_addition_query_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        />
+
+</LinearLayout>

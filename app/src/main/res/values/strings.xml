@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">暇つぶし検索 - WaStage</string>
 
-    <string name="action_settings">設定</string>
-    <string name="search_text">検索</string>
-    <string name="settings_color_text">色設定</string>
+    <string name="title_settings">設定</string>
+    <string name="title_search">検索</string>
+    <string name="title_settings_color">色設定</string>
     <string name="copyright">(c) toastkidjp</string>
     <string name="close">閉じる</string>
 
@@ -44,5 +44,10 @@
     <string name="settings_color_saved_title">保存した色</string>
     <string name="settings_color_saved_text">長押しすると削除できます。</string>
     <string name="title_clear_saved_color">すべて削除</string>
+    <string name="favorite_clear_all_title">すべて削除</string>
+    <string name="title_favorite_search">お気に入り検索</string>
+    <string name="favorite_add_title">追加</string>
+    <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
+    <string name="favorite_search_addition_successful_format">{0} をお気に入りに追加しました。</string>
 
 </resources>
