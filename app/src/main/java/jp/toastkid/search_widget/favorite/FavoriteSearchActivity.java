@@ -2,20 +2,18 @@ package jp.toastkid.search_widget.favorite;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import jp.toastkid.search_widget.BaseActivity;
@@ -28,7 +26,6 @@ import jp.toastkid.search_widget.search.SearchCategory;
 /**
  * @author toastkidjp
  */
-
 public class FavoriteSearchActivity extends BaseActivity {
 
     @BindView(R.id.favorite_toolbar)
@@ -108,6 +105,11 @@ public class FavoriteSearchActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Start search action.
+     * @param category Search category
+     * @param query    Search query
+     */
     private void startSearch(final SearchCategory category, final String query) {
         startActivity(SearchActivity.makeShortcutIntent(this, category, query, true));
     }
@@ -122,19 +124,21 @@ public class FavoriteSearchActivity extends BaseActivity {
     protected boolean clickMenu(final MenuItem item) {
         final int itemId = item.getItemId();
         if (itemId == R.id.favorite_toolbar_menu_clear) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.favorite_clear_all_title)
-                    .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.cancel, (d, i) -> d.cancel())
-                    .setPositiveButton(R.string.ok,     (d, i) -> {
-                        Realm.getDefaultInstance().executeTransaction(realm -> realm.delete(FavoriteSearch.class));
-                        Toaster.snackShort(toolbar, R.string.settings_color_delete, ((ColorDrawable) toolbar.getBackground()).getColor());
-                        d.dismiss();
-                    })
-                    .show();
+            new Clear(toolbar).invoke();
+        }
+        if (itemId == R.id.favorite_toolbar_menu_add) {
+            invokeAddition();
         }
         return super.clickMenu(item);
+    }
+
+    @OnClick(R.id.favorite_search_addition)
+    public void add() {
+        invokeAddition();
+    }
+
+    private void invokeAddition() {
+        new Addition(toolbar).invoke();
     }
 
     @Override

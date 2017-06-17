@@ -35,7 +35,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.favorite.FavoriteSearchActivity;
-import jp.toastkid.search_widget.favorite.FavoriteSearchService;
+import jp.toastkid.search_widget.favorite.AddingFavoriteSearchService;
 import jp.toastkid.search_widget.libs.network.NetworkChecker;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 import jp.toastkid.search_widget.search.suggest.SuggestAdapter;
@@ -110,8 +110,8 @@ public class SearchActivity extends BaseActivity {
 
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(SearchManager.QUERY)) {
-            final String category = intent.hasExtra(FavoriteSearchService.EXTRA_KEY_CATEGORY)
-                    ? intent.getStringExtra(FavoriteSearchService.EXTRA_KEY_CATEGORY)
+            final String category = intent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
+                    ? intent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
                     : SearchCategory.WEB.name();
             search(category, intent.getStringExtra(SearchManager.QUERY));
             if (intent.getBooleanExtra(EXTRA_KEY_FINISH_SOON, false)) {
@@ -123,8 +123,8 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void initUrlFactory() {
-        mUrlFactory = new UrlFactory(this);
-        mUrlFactory.initSpinner(mSearchCategories);
+        mUrlFactory = new UrlFactory();
+        SearchCategorySpinnerInitializer.initialize(mSearchCategories);
     }
 
     private void initSuggests() {
@@ -324,7 +324,7 @@ public class SearchActivity extends BaseActivity {
             final boolean finishSoon
     ) {
         final Intent intent = makeIntent(context);
-        intent.putExtra(FavoriteSearchService.EXTRA_KEY_CATEGORY, category.name());
+        intent.putExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY, category.name());
         intent.putExtra(SearchManager.QUERY,   query);
         intent.putExtra(EXTRA_KEY_FINISH_SOON, finishSoon);
         return intent;

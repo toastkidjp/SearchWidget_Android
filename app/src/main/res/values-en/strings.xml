@@ -44,7 +44,10 @@
     <string name="settings_color_saved_title">Saved colors</string>
     <string name="settings_color_saved_text">If you long tap item, it will be deleted.</string>
     <string name="title_clear_saved_color">Clear saved color</string>
-    <string name="favorite_clear_all_title">すべて削除</string>
-    <string name="title_favorite_search">お気に入り検索</string>
+    <string name="favorite_clear_all_title">Clear</string>
+    <string name="title_favorite_search">Favorite search word</string>
+    <string name="favorite_add_title">Add</string>
+    <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
+    <string name="favorite_search_addition_successful_format">{0} をお気に入りに追加しました。</string>
 
 </resources>

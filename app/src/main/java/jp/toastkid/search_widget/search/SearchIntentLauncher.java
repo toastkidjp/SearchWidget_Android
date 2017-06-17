@@ -81,7 +81,7 @@ class SearchIntentLauncher {
                         PendingIntentFactory.makeFavoriteSearchPendingIndent(context, category, query)
                 )
                 .build();
-        intent.launchUrl(context, new UrlFactory(context).make(category, query));
+        intent.launchUrl(context, new UrlFactory().make(category, query));
     }
 
     private Bitmap decodeResource(@DrawableRes final int id) {
