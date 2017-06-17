@@ -3,6 +3,7 @@ package jp.toastkid.search_widget.favorite;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
+import com.github.gfx.android.orma.Relation;
+import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.Realm;
-import io.realm.RealmResults;
+import io.reactivex.schedulers.Schedulers;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.libs.Toaster;
@@ -36,9 +39,7 @@ public class FavoriteSearchActivity extends BaseActivity {
 
     private PreferenceApplier preferenceApplier;
 
-    private RealmResults<FavoriteSearch> savedSearchs;
-
-    private RecyclerView.Adapter<FavoriteSearchHolder> adapter;
+    private OrmaRecyclerViewAdapter<FavoriteSearch, FavoriteSearchHolder> adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,52 +55,23 @@ public class FavoriteSearchActivity extends BaseActivity {
     }
 
     private void initFavSearchsView() {
-        adapter = new RecyclerView.Adapter<FavoriteSearchHolder>() {
-            @Override
-            public FavoriteSearchHolder onCreateViewHolder(
-                    final ViewGroup parent,
-                    final int viewType
-            ) {
-                final LayoutInflater inflater = LayoutInflater.from(FavoriteSearchActivity.this);
-                return new FavoriteSearchHolder(inflater.inflate(R.layout.favorite_search_item, parent, false));
-            }
-
-            @Override
-            public void onBindViewHolder(final FavoriteSearchHolder holder, final int position) {
-                bindViews(holder, savedSearchs.get(position));
-            }
-
-            @Override
-            public int getItemCount() {
-                return savedSearchs.size();
-            }
-        };
+        adapter = new Adapter(this, DbInitter.get(this).relationOfFavoriteSearch());
         favSearchsView.setAdapter(adapter);
         favSearchsView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        Realm.init(this);
-        savedSearchs = Realm.getDefaultInstance().where(FavoriteSearch.class).findAll();
-        if (savedSearchs.size() == 0) {
-            return;
-        }
-        savedSearchs.addChangeListener(r -> adapter.notifyDataSetChanged());
-        adapter.notifyDataSetChanged();
     }
 
     private void bindViews(final FavoriteSearchHolder holder, final FavoriteSearch favoriteSearch) {
-        final SearchCategory category = SearchCategory.findByCategory(favoriteSearch.getCategory());
+        final SearchCategory category = SearchCategory.findByCategory(favoriteSearch.category);
         holder.setImageId(category.getIconId());
 
-        final String query = favoriteSearch.getQuery();
+        final String query = favoriteSearch.query;
         holder.setText(query);
 
         holder.itemView.setOnClickListener(v -> startSearch(category, query));
 
         holder.removeView.setOnClickListener(v -> {
-            final int index = savedSearchs.indexOf(favoriteSearch);
-            Realm.getDefaultInstance().executeTransaction(realm -> favoriteSearch.deleteFromRealm());
-            adapter.notifyItemRemoved(index);
+            adapter.removeItemAsMaybe(favoriteSearch).subscribeOn(Schedulers.io()).subscribe();
             Toaster.snackShort(holder.imageView, R.string.settings_color_delete, preferenceApplier.getColor());
         });
     }
@@ -123,7 +95,7 @@ public class FavoriteSearchActivity extends BaseActivity {
     protected boolean clickMenu(final MenuItem item) {
         final int itemId = item.getItemId();
         if (itemId == R.id.favorite_toolbar_menu_clear) {
-            new Clear(toolbar).invoke();
+            new Clear(toolbar, adapter.getRelation().deleter()).invoke();
         }
         if (itemId == R.id.favorite_toolbar_menu_add) {
             invokeAddition();
@@ -143,6 +115,32 @@ public class FavoriteSearchActivity extends BaseActivity {
     @Override
     protected int getTitleId() {
         return R.string.title_favorite_search;
+    }
+
+    private class Adapter extends OrmaRecyclerViewAdapter<FavoriteSearch, FavoriteSearchHolder> {
+
+        Adapter(@NonNull Context context, @NonNull Relation<FavoriteSearch, ?> relation) {
+            super(context, relation);
+        }
+
+        @Override
+        public FavoriteSearchHolder onCreateViewHolder(
+                final ViewGroup parent,
+                final int viewType
+        ) {
+            final LayoutInflater inflater = LayoutInflater.from(FavoriteSearchActivity.this);
+            return new FavoriteSearchHolder(inflater.inflate(R.layout.favorite_search_item, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(final FavoriteSearchHolder holder, final int position) {
+            bindViews(holder, adapter.getRelation().get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return adapter.getRelation().count();
+        }
     }
 
     /**
