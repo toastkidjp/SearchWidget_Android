@@ -18,12 +18,15 @@ public class AddingFavoriteSearchService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
+        if (intent == null) {
+            return START_STICKY_COMPATIBILITY;
+        }
         new Insertion(
                 getApplicationContext(),
                 intent.getStringExtra(EXTRA_KEY_CATEGORY),
                 intent.getStringExtra(EXTRA_KEY_QUERY)
         ).insert();
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY_COMPATIBILITY;
     }
 
     @Nullable
