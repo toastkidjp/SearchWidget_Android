@@ -7,7 +7,7 @@ android {
 
     byte verMajor  = 1;
     byte verMiddle = 1;
-    byte verMinor  = 0;
+    byte verMinor  = 1;
 
     defaultConfig {
         applicationId "jp.toastkid.search_widget"
