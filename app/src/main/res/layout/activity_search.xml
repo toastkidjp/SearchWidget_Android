@@ -25,26 +25,29 @@
                 android:layout_height="match_parent"
                 android:layout_weight="7"
                 >
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/search_input_area"
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/search_input"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/search_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:maxLines="1"
-                        android:gravity="center_vertical"
-                        android:hint="@string/title_search"
-                        android:textColorHint="@color/white"
-                        android:textColor="@color/white"
-                        app:theme="@style/EditTextStyle"
-                        android:drawableLeft="@drawable/ic_search_white"
-                        android:inputType="text"
-                        android:imeOptions="actionSearch"
-                        />
-                </android.support.design.widget.TextInputLayout>
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:hint="@string/title_search"
+                    android:textColorHint="@color/white"
+                    android:textColor="@color/white"
+                    app:theme="@style/EditTextStyle"
+                    android:drawableLeft="@drawable/ic_search_white"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:background="@drawable/ripple_appwidget"
+                    />
+                <LinearLayout
+                    android:id="@+id/search_input_border"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/white"
+                    />
                 <ImageView
                     android:id="@+id/search_clear"
                     android:layout_width="40dp"
