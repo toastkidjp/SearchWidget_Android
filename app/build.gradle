@@ -7,7 +7,7 @@ android {
 
     byte verMajor  = 1;
     byte verMiddle = 1;
-    byte verMinor  = 0;
+    byte verMinor  = 2;
 
     defaultConfig {
         applicationId "jp.toastkid.search_widget"
@@ -60,7 +60,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
     def leakcanaryVersion = '1.5.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:'         + leakcanaryVersion
+    debugCompile   'com.squareup.leakcanary:leakcanary-android:'       + leakcanaryVersion
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:' + leakcanaryVersion
 
     testCompile 'junit:junit:4.12'

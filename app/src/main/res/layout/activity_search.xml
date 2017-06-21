@@ -30,7 +30,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:maxLines="1"
-                    android:gravity="center_vertical"
                     android:hint="@string/title_search"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
@@ -38,6 +37,16 @@
                     android:drawableLeft="@drawable/ic_search_white"
                     android:inputType="text"
                     android:imeOptions="actionSearch"
+                    android:background="@drawable/ripple_appwidget"
+                    />
+                <LinearLayout
+                    android:id="@+id/search_input_border"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/white"
                     />
                 <ImageView
                     android:id="@+id/search_clear"

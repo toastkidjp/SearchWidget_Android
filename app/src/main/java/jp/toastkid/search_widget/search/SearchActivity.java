@@ -3,6 +3,7 @@ package jp.toastkid.search_widget.search;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,6 +37,8 @@ import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
 import jp.toastkid.search_widget.favorite.AddingFavoriteSearchService;
 import jp.toastkid.search_widget.favorite.FavoriteSearchActivity;
+import jp.toastkid.search_widget.libs.Inputs;
+import jp.toastkid.search_widget.libs.Toaster;
 import jp.toastkid.search_widget.libs.network.NetworkChecker;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 import jp.toastkid.search_widget.search.suggest.SuggestAdapter;
@@ -53,16 +56,23 @@ public class SearchActivity extends BaseActivity {
     /** Key of extra. */
     private static final String EXTRA_KEY_FINISH_SOON = "finish_soon";
 
+    /** Suggest cache capacity. */
+    public static final int SUGGEST_CACHE_CAPACITY = 30;
+
     /** Background filter. */
     @BindView(R.id.search_background_filter)
     public View mFilter;
 
+    /** Toolbar. */
     @BindView(R.id.search_toolbar)
     public Toolbar mToolbar;
 
     /** Search input. */
     @BindView(R.id.search_input)
     public AppCompatEditText mSearchInput;
+
+    @BindView(R.id.search_input_border)
+    public View searchBorder;
 
     /** Search category. */
     @BindView(R.id.search_categories)
@@ -76,6 +86,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.search_action)
     public TextView mSearchAction;
 
+    /** Control of clear input text. */
     @BindView(R.id.search_clear)
     public ImageView mSearchClear;
 
@@ -85,9 +96,6 @@ public class SearchActivity extends BaseActivity {
 
     /** Preference applier. */
     private PreferenceApplier mPreferenceApplier;
-
-    /** Search result URL factory. */
-    private UrlFactory mUrlFactory;
 
     /** Suggest Adapter. */
     private SuggestAdapter mSuggestAdapter;
@@ -101,7 +109,7 @@ public class SearchActivity extends BaseActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         mPreferenceApplier = new PreferenceApplier(this);
 
-        initUrlFactory();
+        SearchCategorySpinnerInitializer.initialize(mSearchCategories);
         initSuggests();
         initSearchInput();
         initToolbar(mToolbar);
@@ -121,11 +129,6 @@ public class SearchActivity extends BaseActivity {
         }
 
         mSearchClear.setOnClickListener(v -> mSearchInput.setText(""));
-    }
-
-    private void initUrlFactory() {
-        mUrlFactory = new UrlFactory();
-        SearchCategorySpinnerInitializer.initialize(mSearchCategories);
     }
 
     private void initSuggests() {
@@ -150,7 +153,7 @@ public class SearchActivity extends BaseActivity {
 
             private final SuggestFetcher mFetcher = new SuggestFetcher();
 
-            private final Map<String, List<String>> mCache = new HashMap<>(30);
+            private final Map<String, List<String>> mCache = new HashMap<>(SUGGEST_CACHE_CAPACITY);
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -229,17 +232,16 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        final InputMethodManager inputMethodManager
-                = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(mSearchInput, 0);
-        mFilter.setBackgroundColor(getResources().getColor(R.color.darkgray_scale));
+        Inputs.showKeyboard(this, mSearchInput);
         applyColor();
     }
 
+    /**
+     * Apply color to views.
+     */
     private void applyColor() {
-        final PreferenceApplier preferenceApplier = mPreferenceApplier;
-        final int bgColor = preferenceApplier.getColor();
-        final int fontColor = preferenceApplier.getFontColor();
+        final int bgColor   = mPreferenceApplier.getColor();
+        final int fontColor = mPreferenceApplier.getFontColor();
         applyColorToToolbar(mToolbar, bgColor, fontColor);
         mSearchInput.setTextColor(fontColor);
         mSearchInput.setHintTextColor(fontColor);
@@ -248,10 +250,10 @@ public class SearchActivity extends BaseActivity {
             getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(bgColor, 255));
         }
 
-        mSearchActionBackground.setBackgroundColor(
-                ColorUtils.setAlphaComponent(mPreferenceApplier.getColor(), 128));
-        mSearchAction.setTextColor(mPreferenceApplier.getFontColor());
-        mSearchClear.setColorFilter(mPreferenceApplier.getFontColor());
+        mSearchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128));
+        mSearchAction.setTextColor(fontColor);
+        mSearchClear.setColorFilter(fontColor);
+        searchBorder.setBackgroundColor(fontColor);
     }
 
     /**
@@ -287,6 +289,9 @@ public class SearchActivity extends BaseActivity {
         return R.string.search_action_title;
     }
 
+    /**
+     * Clicked "Search" action.
+     */
     @OnClick(R.id.search_action)
     public void clickSearch() {
         search(mSearchCategories.getSelectedItem().toString(), mSearchInput.getText().toString());
@@ -301,19 +306,6 @@ public class SearchActivity extends BaseActivity {
         final Intent intent = new Intent(context, SearchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
-    }
-
-    /**
-     * Make launcher intent.
-     * @param context
-     * @return launcher intent
-     */
-    public static Intent makeShortcutIntent(
-            @NonNull final Context context,
-            @NonNull final SearchCategory category,
-            @NonNull final String query
-    ) {
-        return makeShortcutIntent(context, category, query, false);
     }
 
     /**

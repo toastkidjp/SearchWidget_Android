@@ -1,5 +1,10 @@
 *.apk
 *.iml
+*.lnk
+*.class
+device-*.png
+ic_launcher-web.png
+ic_launcher_circle-web.png
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -8,12 +13,8 @@
 /build
 /captures
 .externalNativeBuild
-*.class
 gradle/
 gradlew
 gradlew.bat
 .idea/
-device-*.png
-ic_launcher-web.png
-ic_launcher_circle-web.png
 google-services.json
