@@ -49,5 +49,8 @@
     <string name="favorite_add_title">追加</string>
     <string name="favorite_search_addition_dialog_empty_message">キーワードを入力してください。</string>
     <string name="favorite_search_addition_successful_format">{0} をお気に入りに追加しました。</string>
+    <string name="search_category_technology">TechCrunch</string>
+    <string name="search_category_github">GitHub</string>
+    <string name="search_category_mvnrepository">MvnRepository</string>
 
 </resources>

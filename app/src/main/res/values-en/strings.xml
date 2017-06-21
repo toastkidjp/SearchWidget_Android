@@ -49,5 +49,8 @@
     <string name="favorite_add_title">Add</string>
     <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="favorite_search_addition_successful_format">It has been insert "{0}" to "Favorite search word".</string>
+    <string name="search_category_technology">TechCrunch</string>
+    <string name="search_category_github">GitHub</string>
+    <string name="search_category_mvnrepository">MvnRepository</string>
 
 </resources>
