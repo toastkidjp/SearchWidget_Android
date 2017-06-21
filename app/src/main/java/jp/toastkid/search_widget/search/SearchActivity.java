@@ -71,6 +71,9 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.search_input)
     public AppCompatEditText mSearchInput;
 
+    @BindView(R.id.search_input_border)
+    public View searchBorder;
+
     /** Search category. */
     @BindView(R.id.search_categories)
     public Spinner mSearchCategories;
@@ -237,9 +240,8 @@ public class SearchActivity extends BaseActivity {
      * Apply color to views.
      */
     private void applyColor() {
-        final PreferenceApplier preferenceApplier = mPreferenceApplier;
-        final int bgColor = preferenceApplier.getColor();
-        final int fontColor = preferenceApplier.getFontColor();
+        final int bgColor   = mPreferenceApplier.getColor();
+        final int fontColor = mPreferenceApplier.getFontColor();
         applyColorToToolbar(mToolbar, bgColor, fontColor);
         mSearchInput.setTextColor(fontColor);
         mSearchInput.setHintTextColor(fontColor);
@@ -248,10 +250,10 @@ public class SearchActivity extends BaseActivity {
             getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(bgColor, 255));
         }
 
-        mSearchActionBackground.setBackgroundColor(
-                ColorUtils.setAlphaComponent(mPreferenceApplier.getColor(), 128));
-        mSearchAction.setTextColor(mPreferenceApplier.getFontColor());
-        mSearchClear.setColorFilter(mPreferenceApplier.getFontColor());
+        mSearchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128));
+        mSearchAction.setTextColor(fontColor);
+        mSearchClear.setColorFilter(fontColor);
+        searchBorder.setBackgroundColor(fontColor);
     }
 
     /**

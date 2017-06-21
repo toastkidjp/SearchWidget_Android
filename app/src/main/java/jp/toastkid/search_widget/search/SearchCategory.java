@@ -54,9 +54,27 @@ public enum SearchCategory {
                 return "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Uri.encode(q);
             }
     ),
-    TECHNICAL(R.string.search_category_technical_qa,
+    TECHNICAL_QA(R.string.search_category_technical_qa,
             R.drawable.ic_technical_qa,
             "https://stackoverflow.com/search?q="
+    ),
+    TECHNOLOGY(R.string.search_category_technology,
+              R.drawable.ic_technology,
+            "http://jp.techcrunch.com/search/",
+            (h, q) -> {
+                if (Locale.JAPANESE.getLanguage().equals(Locale.getDefault().getLanguage())) {
+                    return h + Uri.encode(q);
+                }
+                return "https://techcrunch.com/search/" + Uri.encode(q);
+            }
+    ),
+    GITHUB(R.string.search_category_github,
+            R.drawable.ic_github,
+            "https://github.com/search?utf8=%E2%9C%93&type=&q="
+    ),
+    MVNREPOSITORY(R.string.search_category_mvnrepository,
+            R.drawable.ic_mvn,
+            "https://mvnrepository.com/search?q="
     )
     ;
 

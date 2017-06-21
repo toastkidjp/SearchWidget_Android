@@ -20,6 +20,9 @@
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_shopping">Shopping</string>
     <string name="search_category_technical_qa">Software technical Q &amp; A</string>
+    <string name="search_category_technology">TechCrunch</string>
+    <string name="search_category_github">GitHub</string>
+    <string name="search_category_mvnrepository">MvnRepository</string>
 
     <string name="settings_color_background_title">Background</string>
     <string name="settings_color_font_title">Text</string>
@@ -49,5 +52,6 @@
     <string name="favorite_add_title">Add</string>
     <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="favorite_search_addition_successful_format">It has been insert "{0}" to "Favorite search word".</string>
+    <string name="favorite_search_error_input_message">You should input any word!</string>
 
 </resources>
