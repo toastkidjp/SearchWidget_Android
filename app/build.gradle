@@ -46,8 +46,9 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     def firebaseVersion = '10.2.1'
-    compile 'com.google.firebase:firebase-core:' + firebaseVersion
-    compile 'com.google.firebase:firebase-ads:'  + firebaseVersion
+    compile 'com.google.firebase:firebase-core:'  + firebaseVersion
+    compile 'com.google.firebase:firebase-ads:'   + firebaseVersion
+    compile 'com.google.firebase:firebase-crash:' + firebaseVersion
 
     compile 'com.larswerkman:HoloColorPicker:1.5'
     compile 'com.jakewharton:butterknife:8.6.0'
