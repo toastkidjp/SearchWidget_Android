@@ -15,7 +15,7 @@
     <string name="search_category_image">Image</string>
     <string name="search_category_map">Map</string>
     <string name="search_category_apps">Apps</string>
-    <string name="search_category_twitter">SNS</string>
+    <string name="search_category_twitter">Twitter</string>
     <string name="search_category_youtube">Video</string>
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_shopping">Shopping</string>
@@ -53,5 +53,8 @@
     <string name="favorite_search_addition_dialog_empty_message">Please could you input any keyword?</string>
     <string name="favorite_search_addition_successful_format">It has been insert "{0}" to "Favorite search word".</string>
     <string name="favorite_search_error_input_message">You should input any word!</string>
+    <string name="search_category_instagram">Instagram</string>
+    <string name="title_privacy_policy">Privacy policy</string>
+    <string name="link_privacy_policy">https://tmblr.co/ZDG7Be2NVdctY</string>
 
 </resources>
