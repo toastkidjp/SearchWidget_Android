@@ -130,6 +130,12 @@ public class SettingsActivity extends BaseActivity {
         return R.string.title_settings;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adView.destroy();
+    }
+
     /**
      * Make launcher intent.
      * @param context
