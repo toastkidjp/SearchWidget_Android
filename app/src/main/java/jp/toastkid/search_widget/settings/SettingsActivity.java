@@ -2,8 +2,10 @@ package jp.toastkid.search_widget.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -108,6 +110,14 @@ public class SettingsActivity extends BaseActivity {
     public void switchSuggest() {
         mPreferenceApplier.switchEnableSuggest();
         mEnableSuggestCheck.setChecked(mPreferenceApplier.isEnableSuggest());
+    }
+
+    @OnClick(R.id.privacy_policy)
+    public void privacyPolicy() {
+        sendLog("nav_prvcy_plcy");
+        new CustomTabsIntent.Builder().setToolbarColor(mPreferenceApplier.getColor())
+                .build()
+                .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)));
     }
 
     @OnClick(R.id.settings_background)

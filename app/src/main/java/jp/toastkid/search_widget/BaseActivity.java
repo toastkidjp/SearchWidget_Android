@@ -59,6 +59,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    protected void sendLog(final String key) {
+        sendLog(key, Bundle.EMPTY);
+    }
+
     protected void sendLog(final String key, final Bundle bundle) {
         if (BuildConfig.DEBUG) {
             return;

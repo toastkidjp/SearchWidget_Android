@@ -54,5 +54,7 @@
     <string name="favorite_search_addition_successful_format">{0} をお気に入りに追加しました。</string>
     <string name="favorite_search_error_input_message">キーワードを入力してください。</string>
     <string name="search_category_instagram">Instagram</string>
+    <string name="title_privacy_policy">プライバシーポリシー</string>
+    <string name="link_privacy_policy">https://tmblr.co/ZDG7Be2NVdctY</string>
 
 </resources>
