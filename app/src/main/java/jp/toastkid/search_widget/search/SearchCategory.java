@@ -36,6 +36,10 @@ public enum SearchCategory {
             R.drawable.ic_sns,
             "https://twitter.com/search?src=typd&q="
     ),
+    INSTAGRAM(R.string.search_category_instagram,
+            R.drawable.ic_photo,
+            "https://www.instagram.com/explore/tags/"
+    ),
     MAP(R.string.search_category_map,
             R.drawable.ic_map,
             "https://www.google.co.jp/maps/place/"
