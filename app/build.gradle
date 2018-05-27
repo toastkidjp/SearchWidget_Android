@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 27
@@ -12,7 +11,7 @@ android {
     defaultConfig {
         applicationId "jp.toastkid.search_widget"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 27
         if (verMiddle >= 100 || verMinor >= 100) {
             throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
         }
@@ -34,37 +33,37 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    def supportLibVersion = '25.3.1'
-    compile 'com.android.support:appcompat-v7:' + supportLibVersion
-    compile 'com.android.support:design:'       + supportLibVersion
-    compile 'com.android.support:customtabs:'   + supportLibVersion
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    def supportLibVersion = '27.1.1'
+    implementation 'com.android.support:appcompat-v7:' + supportLibVersion
+    implementation 'com.android.support:design:'       + supportLibVersion
+    implementation 'com.android.support:customtabs:'   + supportLibVersion
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    def firebaseVersion = '10.2.1'
-    compile 'com.google.firebase:firebase-core:'  + firebaseVersion
-    compile 'com.google.firebase:firebase-ads:'   + firebaseVersion
-    compile 'com.google.firebase:firebase-crash:' + firebaseVersion
+    def firebaseVersion = '11.6.2'
+    implementation 'com.google.firebase:firebase-core:'  + firebaseVersion
+    implementation 'com.google.firebase:firebase-ads:'   + firebaseVersion
+    implementation 'com.google.firebase:firebase-crash:' + firebaseVersion
 
-    compile 'com.larswerkman:HoloColorPicker:1.5'
-    compile 'com.jakewharton:butterknife:8.6.0'
-    compile 'com.squareup.okhttp3:okhttp:3.8.0'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.github.gfx.android.orma:orma:4.2.5'
+    implementation 'com.larswerkman:HoloColorPicker:1.5'
+    implementation 'com.jakewharton:butterknife:8.6.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.github.gfx.android.orma:orma:4.2.5'
 
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
     def leakcanaryVersion = '1.5.1'
-    debugCompile   'com.squareup.leakcanary:leakcanary-android:'       + leakcanaryVersion
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:' + leakcanaryVersion
+    debugImplementation   'com.squareup.leakcanary:leakcanary-android:'       + leakcanaryVersion
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:' + leakcanaryVersion
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
