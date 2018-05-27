@@ -18,3 +18,5 @@ gradlew
 gradlew.bat
 .idea/
 google-services.json
+app/debug/*
+app/release/*
