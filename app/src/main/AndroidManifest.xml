@@ -40,11 +40,6 @@
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="screenSize"
             />
-        <service android:name=".favorite.AddingFavoriteSearchService">
-            <intent-filter>
-                <action android:name="ADD_ITEM" />
-            </intent-filter>
-        </service>
         <receiver android:name=".appwidget.Provider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -55,7 +50,9 @@
         </receiver>
         <receiver
             android:name=".appwidget.IntentReceiver"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:exported="false"
+            >
             <intent-filter>
                 <action android:name="UPDATE_WIDGET" />
             </intent-filter>
@@ -63,6 +60,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />
         </receiver>
+        <receiver
+            android:name=".favorite.AddingFavoriteSearchReceiver"
+            android:exported="false"
+            />
+
     </application>
 
 </manifest>

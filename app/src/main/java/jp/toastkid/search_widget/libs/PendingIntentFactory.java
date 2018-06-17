@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import jp.toastkid.search_widget.favorite.AddingFavoriteSearchService;
 import jp.toastkid.search_widget.favorite.FavoriteSearchActivity;
 import jp.toastkid.search_widget.search.SearchActivity;
 import jp.toastkid.search_widget.settings.SettingsActivity;
@@ -57,18 +56,4 @@ public class PendingIntentFactory {
         return PendingIntent.getActivity(context, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    /**
-     * Make adding favorite search intent.
-     * @param context
-     * @param category
-     * @param query
-     * @return {@link AddingFavoriteSearchService}'s pending intent
-     */
-    public static PendingIntent makeFavoriteSearchAddingPendingIndent(
-            final Context context, final String category, final String query) {
-        final Intent intent = new Intent(context, AddingFavoriteSearchService.class);
-        intent.putExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY, category);
-        intent.putExtra(AddingFavoriteSearchService.EXTRA_KEY_QUERY,    query);
-        return PendingIntent.getService(context, 4, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
 }

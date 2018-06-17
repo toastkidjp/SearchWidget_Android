@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 
 import jp.toastkid.search_widget.R;
+import jp.toastkid.search_widget.favorite.AddingFavoriteSearchReceiver;
 import jp.toastkid.search_widget.libs.PendingIntentFactory;
 
 /**
@@ -78,7 +79,7 @@ class SearchIntentLauncher {
                 )
                 .addMenuItem(
                         "お気に入り検索に追加",
-                        PendingIntentFactory.makeFavoriteSearchAddingPendingIndent(context, category, query)
+                        AddingFavoriteSearchReceiver.makeBroadcastPendingIndent(context, category, query)
                 )
                 .build();
         intent.launchUrl(context, new UrlFactory().make(category, query));
