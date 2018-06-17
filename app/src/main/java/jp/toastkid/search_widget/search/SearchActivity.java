@@ -3,7 +3,6 @@ package jp.toastkid.search_widget.search;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -35,10 +33,9 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.toastkid.search_widget.BaseActivity;
 import jp.toastkid.search_widget.R;
-import jp.toastkid.search_widget.favorite.AddingFavoriteSearchService;
+import jp.toastkid.search_widget.favorite.AddingFavoriteSearchReceiver;
 import jp.toastkid.search_widget.favorite.FavoriteSearchActivity;
 import jp.toastkid.search_widget.libs.Inputs;
-import jp.toastkid.search_widget.libs.Toaster;
 import jp.toastkid.search_widget.libs.network.NetworkChecker;
 import jp.toastkid.search_widget.libs.preference.PreferenceApplier;
 import jp.toastkid.search_widget.search.suggest.SuggestAdapter;
@@ -119,8 +116,8 @@ public class SearchActivity extends BaseActivity {
 
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(SearchManager.QUERY)) {
-            final String category = intent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
-                    ? intent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
+            final String category = intent.hasExtra(AddingFavoriteSearchReceiver.EXTRA_KEY_CATEGORY)
+                    ? intent.getStringExtra(AddingFavoriteSearchReceiver.EXTRA_KEY_CATEGORY)
                     : SearchCategory.WEB.name();
             search(category, intent.getStringExtra(SearchManager.QUERY));
             if (intent.getBooleanExtra(EXTRA_KEY_FINISH_SOON, false)) {
@@ -323,7 +320,7 @@ public class SearchActivity extends BaseActivity {
             final boolean finishSoon
     ) {
         final Intent intent = makeIntent(context);
-        intent.putExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY, category.name());
+        intent.putExtra(AddingFavoriteSearchReceiver.EXTRA_KEY_CATEGORY, category.name());
         intent.putExtra(SearchManager.QUERY,   query);
         intent.putExtra(EXTRA_KEY_FINISH_SOON, finishSoon);
         return intent;
